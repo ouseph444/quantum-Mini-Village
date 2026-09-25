@@ -1,0 +1,1028 @@
+/* Quantum Village — Realtime Database rules. Presence, chat, announcements and
+   room claims live here because they change several times a second and would be
+   expensive in Firestore. Deploy with: firebase deploy --only database — or
+   paste this file into Firebase console → Realtime Database → Rules. */
+
+/* The village is walled: every read and write needs an account with a password
+   (auth.provider === 'password') that is not on the blocked list. Anonymous
+   sign-in must be DISABLED in the console. Enable Authentication → Sign-in
+   method → Email/Password, and disable Anonymous and Google. */
+
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "admins": {
+      /* Who may administer the village. Readable by anyone signed in, so the
+         page knows whether to show the panel — and writable by NOBODY from a
+         browser. The only way to appoint an administrator is the Firebase
+         console (Realtime Database → Data → add admins/<uid>: true) or a server
+         holding a service-account key. An administrator cannot be appointed by
+         the page that checks for one, which is the whole point. */
+      ".read": "auth.provider === 'password'",
+      ".write": false,
+      "$uid": {
+        ".validate": "newData.isBoolean()"
+      }
+    },
+    "blocked": {
+      /* Residents who are barred. Every other rule in this file refuses a
+         request whose auth.uid appears here, so a blocked account may still hold
+         a valid token, may still open the page, and will not be given one byte
+         of the village nor be allowed to write one. Only an administrator may
+         add or remove an entry. Deliberately NOT guarded by the block check
+         itself: somebody who has been blocked must still be able to read their
+         own record to be told so, and an administrator who blocks themselves
+         must still be able to undo it. */
+      ".read": "auth.provider === 'password' && root.child('admins').child(auth.uid).val() === true",
+      "$uid": {
+        ".read": "auth.provider === 'password' && (auth.uid == $uid || root.child('admins').child(auth.uid).val() === true)",
+        ".write": "auth.provider === 'password' && root.child('admins').child(auth.uid).val() === true",
+        ".validate": "!newData.exists() || newData.hasChildren(['at','by'])",
+        "at": {
+          ".validate": "newData.isNumber()"
+        },
+        "by": {
+          ".validate": "newData.isString() && newData.val() == auth.uid"
+        },
+        "byName": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "why": {
+          ".validate": "newData.isString() && newData.val().length <= 140"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "presence": {
+      /* One record per resident: where they are, what they are doing. Removed by
+         onDisconnect when a tab closes; a record left behind by a crash may be
+         deleted by anyone once it is five minutes stale. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$uid": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (auth.uid == $uid || (!newData.exists() && root.child('admins').child(auth.uid).val() === true) || (data.exists() && !newData.exists() && data.child('at').val() < (now - 300000)))",
+        ".validate": "newData.hasChildren(['n','x','z','at'])",
+        "n": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "x": {
+          ".validate": "newData.isNumber()"
+        },
+        "z": {
+          ".validate": "newData.isNumber()"
+        },
+        "r": {
+          ".validate": "newData.isNumber()"
+        },
+        "p": {
+          ".validate": "newData.isString() && newData.val().length <= 48"
+        },
+        "at": {
+          ".validate": "newData.isNumber()"
+        },
+        "l": {
+          ".validate": "newData.hasChildren()"
+        },
+        "rm": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "st": {
+          ".validate": "newData.isString() && newData.val().length <= 8"
+        },
+        "si": {
+          ".validate": "newData.isNumber()"
+        },
+        "cy": {
+          ".validate": "newData.isBoolean()"
+        },
+        "af": {
+          ".validate": "newData.isString() && newData.val().length <= 90"
+        },
+        "co": {
+          ".validate": "newData.isString() && newData.val().length <= 56"
+        },
+        "oi": {
+          ".validate": "newData.isString() && newData.val().length <= 19"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "chat": {
+      /* Village talk, and nothing more: a line lives here only until the people
+         who are online have read it. The author pushes it with an
+         onDisconnect().remove() hook, readers acknowledge under seen/, and the
+         author deletes it once everybody present has acknowledged or after
+         forty-five seconds, whichever comes first. There is no history to read
+         and nothing to prune. Ordinary talk carries about seventy paces; an
+         announcement (a:true) carries to everyone. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$msg": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (!data.exists() || data.child('uid').val() == auth.uid)",
+        ".validate": "newData.hasChildren(['n','m','at'])",
+        "n": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "m": {
+          ".validate": "newData.isString() && newData.val().length <= 300"
+        },
+        "uid": {
+          ".validate": "newData.val() == auth.uid"
+        },
+        "at": {
+          ".validate": "newData.isNumber()"
+        },
+        "seen": {
+          /* Read receipts. Every reader writes their own uid here once the line
+             is on screen; the author watches this list and deletes the whole
+             message as soon as everybody present has read it. That is the only
+             reason the village keeps a message at all. */
+          "$uid": {
+            ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $uid",
+            ".validate": "!newData.exists() || newData.val() === true"
+          }
+        },
+        "$other": {
+          ".validate": false
+        },
+        "x": {
+          ".validate": "newData.isNumber()"
+        },
+        "z": {
+          ".validate": "newData.isNumber()"
+        },
+        "a": {
+          ".validate": "newData.isBoolean()"
+        }
+        /* x and z are where the speaker stood, so clients can drop anything out
+           of earshot; a marks an announcement, which everyone hears wherever
+           they are. */
+      }
+    },
+    "events": {
+      /* Announcements: an institute founded, a seminar called. Write once, never
+         edit. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$evt": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && !data.exists()",
+        ".validate": "newData.hasChildren(['kind','at'])",
+        "kind": {
+          ".validate": "newData.isString() && newData.val().length <= 24"
+        },
+        "name": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "where": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "by": {
+          ".validate": "newData.isString() && newData.val().length <= 64"
+        },
+        "at": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "rooms": {
+      /* Who is sitting where, and who has the blackboard. Each claim is { u:
+         uid, t: when }. A claim may be taken only if the slot is free, already
+         yours, or more than an hour stale — which is the safety net for a client
+         that died without its onDisconnect firing. Clients claim with a
+         transaction, so two people pressing E on the same chair cannot both get
+         it. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$room": {
+        "seats": {
+          "$seat": {
+            ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (!data.exists() || data.child('u').val() == auth.uid || data.child('t').val() < (now - 3600000))",
+            ".validate": "newData.hasChildren(['u','t'])",
+            "u": {
+              ".validate": "newData.isString() && newData.val() == auth.uid"
+            },
+            "t": {
+              ".validate": "newData.isNumber() && newData.val() <= (now + 60000)"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "speaker": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (!data.exists() || data.child('u').val() == auth.uid || data.child('t').val() < (now - 3600000))",
+          ".validate": "newData.hasChildren(['u','t'])",
+          "u": {
+            ".validate": "newData.isString() && newData.val() == auth.uid"
+          },
+          "t": {
+            ".validate": "newData.isNumber() && newData.val() <= (now + 60000)"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "boards": {
+      /* Chalk and pinned pictures, filed under whoever wrote them. Every entry
+         carries a disconnect hook client-side, so this tree empties itself as
+         people leave; nothing here is meant to survive a session. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$board": {
+        "$uid": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $uid",
+          ".validate": "newData.hasChildren(['at'])",
+          "s": {
+            ".validate": "newData.isString() && newData.val().length <= 1200"
+          },
+          "p": {
+            ".validate": "newData.isString() && newData.val().length <= 900000 && (newData.val() === '' || root.child('pins').child('boards').child($board).child('u').val() === auth.uid)"
+          },
+          "n": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "at": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "pins": {
+      /* Who holds each poster stand and each blackboard. One document per
+         surface: the first to claim it keeps it until they take their
+         document down or leave (the claim carries a disconnect hook), and
+         until then nobody else may claim it. The posters, slides and board
+         pictures above are only accepted from the holder. An administrator
+         may clear a claim, for moderation. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$kind": {
+        "$id": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ($kind === 'posters' || $kind === 'boards') && ((!data.exists() && newData.child('u').val() === auth.uid) || (data.child('u').val() === auth.uid && (!newData.exists() || newData.child('u').val() === auth.uid)) || (!newData.exists() && root.child('admins').child(auth.uid).val() === true) || (data.child('expiresAt').isNumber() && data.child('expiresAt').val() <= now && (!newData.exists() || newData.child('u').val() === auth.uid)) || (data.hasChild('competitionId') && root.child('posterCompetitions').child(data.child('competitionId').val()).child('status').val() !== 'active' && (!newData.exists() || newData.child('u').val() === auth.uid)))",
+          ".validate": "newData.hasChildren(['u','at']) && newData.hasChild('competitionId') === newData.hasChild('expiresAt')",
+          "u": {
+            ".validate": "newData.isString() && newData.val() === auth.uid"
+          },
+          "n": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "at": {
+            ".validate": "newData.isNumber()"
+          },
+          /* A stand taken for a poster competition. The claim has no
+             disconnect hook and lasts until the competition ends — exactly
+             approvedAt + 24 h, which is the only expiry accepted — and then
+             anybody may clear it or take the stand. */
+          "competitionId": {
+            ".validate": "$kind === 'posters' && newData.isString() && root.child('posterCompetitions').child(newData.val()).child('status').val() === 'active' && root.child('posterCompetitions').child(newData.val()).child('approvedAt').isNumber() && root.child('posterCompetitions').child(newData.val()).child('approvedAt').val() > now - 86400000 && (($id.beginsWith('poster-hall-2-') && root.child('posterHallCompetition/poster-hall-2/id').val() === newData.val()) || (!$id.beginsWith('poster-hall-2-') && $id.beginsWith('poster-hall-') && root.child('posterHallCompetition/poster-hall/id').val() === newData.val()))"
+          },
+          "expiresAt": {
+            ".validate": "newData.isNumber() && newData.val() === root.child('posterCompetitions').child(newData.parent().child('competitionId').val()).child('approvedAt').val() + 86400000"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "posters": {
+      /* One poster per board per author, as a compressed data URL. Same
+         disconnect hook, same rule: it goes when its author does.
+
+         Except during a poster competition. A poster pinned while its hall
+         has an approved, unexpired competition must carry competitionId,
+         hallId and expiresAt; the rules check all three against the
+         competition, the hall and the stand's claim, and accept only
+         expiresAt = approvedAt + 24 h. The client pins it without a
+         disconnect hook, so it stays up after its author leaves, and once
+         expiresAt has passed anybody may sweep it. An ordinary poster
+         cannot be turned into a competition poster in place, and a new
+         ordinary poster cannot go up in a hall while a competition runs. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$frame": {
+        "$uid": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((auth.uid == $uid && (!newData.exists() || root.child('pins').child('posters').child($frame).child('u').val() === auth.uid)) || (!newData.exists() && (root.child('admins').child(auth.uid).val() === true || (data.child('expiresAt').isNumber() && data.child('expiresAt').val() <= now) || (data.hasChild('competitionId') && root.child('posterCompetitions').child(data.child('competitionId').val()).child('status').val() !== 'active'))))",
+          ".validate": "newData.hasChildren(['s','at']) && newData.hasChild('competitionId') === newData.hasChild('expiresAt') && newData.hasChild('competitionId') === newData.hasChild('hallId') && (!newData.hasChild('competitionId') || !data.exists() || data.hasChild('competitionId')) && (newData.hasChild('competitionId') || (data.exists() && !data.hasChild('competitionId')) || !(($frame.beginsWith('poster-hall-2-') && root.child('posterHallCompetition/poster-hall-2/approvedAt').isNumber() && root.child('posterHallCompetition/poster-hall-2/approvedAt').val() > now - 86400000) || (!$frame.beginsWith('poster-hall-2-') && $frame.beginsWith('poster-hall-') && root.child('posterHallCompetition/poster-hall/approvedAt').isNumber() && root.child('posterHallCompetition/poster-hall/approvedAt').val() > now - 86400000)))",
+          "competitionId": {
+            ".validate": "newData.isString() && root.child('pins').child('posters').child($frame).child('competitionId').val() === newData.val() && root.child('posterCompetitions').child(newData.val()).child('status').val() === 'active' && root.child('posterCompetitions').child(newData.val()).child('approvedAt').isNumber() && root.child('posterCompetitions').child(newData.val()).child('approvedAt').val() > now - 86400000 && root.child('posterCompetitions').child(newData.val()).child('hallId').val() === newData.parent().child('hallId').val() && root.child('posterHallCompetition').child(newData.parent().child('hallId').val()).child('id').val() === newData.val()"
+          },
+          "hallId": {
+            ".validate": "newData.isString() && ((newData.val() === 'poster-hall-2' && $frame.beginsWith('poster-hall-2-')) || (newData.val() === 'poster-hall' && $frame.beginsWith('poster-hall-') && !$frame.beginsWith('poster-hall-2-')))"
+          },
+          "expiresAt": {
+            ".validate": "newData.isNumber() && newData.val() === root.child('posterCompetitions').child(newData.parent().child('competitionId').val()).child('approvedAt').val() + 86400000"
+          },
+          "s": {
+            ".validate": "newData.isString() && newData.val().length <= 900000"
+          },
+          "t": {
+            ".validate": "newData.isString() && newData.val().length <= 160"
+          },
+          "n": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "at": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "posterCompetitionRequests": {
+      /* Asking for a 24-hour poster competition in a poster hall. Anybody
+         signed in may ask, only in their own name, and only as "pending";
+         they may withdraw a request while it is still pending. Only an
+         administrator may approve or reject, and approval must create the
+         competition in the same write (see posterCompetitions). Nothing
+         the requester writes can set status, approvedAt or expiresAt. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      ".indexOn": ["status", "userId"],
+      "$req": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && !newData.exists() && data.child('userId').val() === auth.uid && data.child('status').val() === 'pending') || (root.child('admins').child(auth.uid).val() === true && (!newData.exists() || (data.exists() && data.child('status').val() === 'pending'))))",
+        ".validate": "newData.hasChildren(['userId','userName','hallId','title','requestedAt','status'])",
+        "userId": {
+          ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())"
+        },
+        "userName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 32 && (!data.exists() || newData.val() === data.val())"
+        },
+        "hallId": {
+          ".validate": "(newData.val() === 'poster-hall' || newData.val() === 'poster-hall-2') && (!data.exists() || newData.val() === data.val())"
+        },
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 90 && (!data.exists() || newData.val() === data.val())"
+        },
+        "description": {
+          ".validate": "newData.isString() && newData.val().length <= 500 && (!data.exists() || newData.val() === data.val())"
+        },
+        "preferredStart": {
+          ".validate": "newData.isNumber() && (!data.exists() || newData.val() === data.val())"
+        },
+        "fullName": {
+          ".validate": "newData.isString() && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val())"
+        },
+        "institution": {
+          ".validate": "newData.isString() && newData.val().length <= 120 && (!data.exists() || newData.val() === data.val())"
+        },
+        "position": {
+          ".validate": "newData.isString() && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val())"
+        },
+        "requestedAt": {
+          ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())"
+        },
+        "status": {
+          ".validate": "newData.isString() && ((!data.exists() && newData.val() === 'pending') || newData.val() === data.val() || (data.val() === 'pending' && newData.val() === 'rejected' && root.child('admins').child(auth.uid).val() === true) || (data.val() === 'pending' && newData.val() === 'approved' && root.child('admins').child(auth.uid).val() === true && newData.parent().parent().parent().child('posterCompetitions').child($req).exists()))"
+        },
+        "approvedAt": {
+          ".validate": "newData.isNumber() && newData.parent().child('status').val() === 'approved' && ((!data.exists() && newData.val() === now) || newData.val() === data.val())"
+        },
+        "expiresAt": {
+            ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && !data.exists()",
+            ".validate": "newData.isNumber() && newData.parent().child('approvedAt').isNumber() && newData.val() === newData.parent().child('approvedAt').val() + 86400000"
+          },
+        "decidedAt": {
+          ".validate": "newData.isNumber() && newData.parent().child('status').val() !== 'pending' && ((!data.exists() && newData.val() === now) || newData.val() === data.val())"
+        },
+        "decidedBy": {
+          ".validate": "newData.isString() && newData.parent().child('status').val() !== 'pending' && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "posterCompetitions": {
+      /* An approved competition, keyed by the request it came from. Created
+         only by an administrator, only together with approving that request
+         and taking the hall (posterHallCompetition), and every field is
+         copied from the request or stamped by the server. Nothing may be
+         changed afterwards except, once approvedAt + 24 h has passed,
+         status "active" → "expired" — which anybody may do, so that the
+         village tidies itself up with or without a Cloud Function. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      ".indexOn": ["status"],
+      "$comp": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((root.child('admins').child(auth.uid).val() === true && (!newData.exists() || !data.exists())) || (data.exists() && newData.exists() && data.child('approvedAt').isNumber() && data.child('approvedAt').val() <= now - 86400000) || (data.exists() && newData.exists() && data.child('status').val() === 'active' && (root.child('admins').child(auth.uid).val() === true || data.child('organiserId').val() === auth.uid)))",
+        ".validate": "newData.hasChildren(['requestId','hallId','title','organiserId','organiserName','status','approvedAt']) && (data.exists() || newData.parent().parent().child('posterHallCompetition').child(newData.child('hallId').val()).child('id').val() === $comp)",
+        "requestId": {
+          ".validate": "newData.val() === $comp"
+        },
+        "hallId": {
+          ".validate": "(data.exists() && newData.val() === data.val()) || (!data.exists() && newData.val() === root.child('posterCompetitionRequests').child($comp).child('hallId').val())"
+        },
+        "title": {
+          ".validate": "(data.exists() && newData.val() === data.val()) || (!data.exists() && newData.val() === root.child('posterCompetitionRequests').child($comp).child('title').val())"
+        },
+        "organiserId": {
+          ".validate": "(data.exists() && newData.val() === data.val()) || (!data.exists() && newData.val() === root.child('posterCompetitionRequests').child($comp).child('userId').val())"
+        },
+        "organiserName": {
+          ".validate": "(data.exists() && newData.val() === data.val()) || (!data.exists() && newData.val() === root.child('posterCompetitionRequests').child($comp).child('userName').val())"
+        },
+        "status": {
+          ".validate": "(!data.exists() && newData.val() === 'active' && root.child('posterCompetitionRequests').child($comp).child('status').val() === 'pending' && newData.parent().parent().parent().child('posterCompetitionRequests').child($comp).child('status').val() === 'approved') || (data.exists() && newData.val() === data.val()) || (data.val() === 'active' && newData.val() === 'expired')"
+        },
+        "endedAt": {
+          ".validate": "newData.isNumber() && newData.parent().child('status').val() === 'expired' && ((!data.exists() && newData.val() === now) || newData.val() === data.val())"
+        },
+        "endedBy": {
+          ".validate": "newData.isString() && newData.parent().child('status').val() === 'expired' && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())"
+        },
+        "approvedAt": {
+          ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())"
+        },
+        "expiresAt": {
+            ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && !data.exists()",
+            ".validate": "newData.isNumber() && newData.parent().child('approvedAt').isNumber() && newData.val() === newData.parent().child('approvedAt').val() + 86400000"
+          },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "posterHallCompetition": {
+      /* The competition a poster hall is running, one at a time. Only an
+         administrator may take a hall, only for a competition created in
+         the same write, and only while the hall is free or its last
+         competition is over — which is what stops two running in the same
+         hall. Once approvedAt + 24 h has passed anybody may clear it. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$hall": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((root.child('admins').child(auth.uid).val() === true && (!newData.exists() || !data.exists() || (data.child('approvedAt').isNumber() && data.child('approvedAt').val() <= now - 86400000))) || (!newData.exists() && data.child('approvedAt').isNumber() && data.child('approvedAt').val() <= now - 86400000) || (!newData.exists() && root.child('posterCompetitions').child(data.child('id').val()).child('organiserId').val() === auth.uid))",
+        ".validate": "($hall === 'poster-hall' || $hall === 'poster-hall-2') && newData.hasChildren(['id','approvedAt'])",
+        "id": {
+          ".validate": "newData.isString() && ((data.exists() && newData.val() === data.val()) || (newData.parent().parent().parent().child('posterCompetitions').child(newData.val()).child('hallId').val() === $hall && !root.child('posterCompetitions').child(newData.val()).exists()))"
+        },
+        "approvedAt": {
+          ".validate": "newData.isNumber() && (newData.val() === now || (newData.val() === data.val() && newData.parent().child('id').val() === data.parent().child('id').val()))"
+        },
+        "expiresAt": {
+            ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && !data.exists()",
+            ".validate": "newData.isNumber() && newData.parent().child('approvedAt').isNumber() && newData.val() === newData.parent().child('approvedAt').val() + 86400000"
+          },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "reports": {
+      /* Reports and feedback from residents: abuse, content, bugs, anything.
+         Administrative records, NOT talk — nothing sweeps them, and they
+         stay until an administrator deletes them. Anybody signed in may
+         file one, in their own name, as "new", stamped with the server's
+         clock, and with the whole message (up to 5000 characters, refused
+         rather than cut short beyond that). Nobody but an administrator may
+         read them, change their status or delete them; the author cannot
+         edit or withdraw one once it is sent. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && root.child('admins').child(auth.uid).val() === true",
+      ".indexOn": ["createdAt", "status"],
+      "$report": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((!data.exists() && newData.child('userId').val() === auth.uid && newData.parent().parent().child('reportThrottle').child(auth.uid).val() === now) || (data.exists() && root.child('admins').child(auth.uid).val() === true))",
+        ".validate": "newData.hasChildren(['reportId','userId','userName','reportType','message','createdAt','status'])",
+        "reportId": {
+          ".validate": "newData.val() === $report"
+        },
+        "userId": {
+          ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())"
+        },
+        "userName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 32 && (!data.exists() || newData.val() === data.val())"
+        },
+        "reportType": {
+          ".validate": "(newData.val() === 'abuse' || newData.val() === 'inappropriate_content' || newData.val() === 'technical_problem' || newData.val() === 'bug' || newData.val() === 'voice_chat' || newData.val() === 'text_chat' || newData.val() === 'login' || newData.val() === 'ui_problem' || newData.val() === 'other') && (!data.exists() || newData.val() === data.val())"
+        },
+        "message": {
+          ".validate": "newData.isString() && newData.val().length >= 5 && newData.val().length <= 5000 && (!data.exists() || newData.val() === data.val())"
+        },
+        "location": {
+          ".validate": "newData.isString() && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val())"
+        },
+        "subject": {
+          ".validate": "newData.isString() && newData.val().length <= 200 && (!data.exists() || newData.val() === data.val())"
+        },
+        "userAgent": {
+          ".validate": "newData.isString() && newData.val().length <= 300 && (!data.exists() || newData.val() === data.val())"
+        },
+        "viewport": {
+          ".validate": "newData.isString() && newData.val().length <= 20 && (!data.exists() || newData.val() === data.val())"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())"
+        },
+        "status": {
+          ".validate": "(!data.exists() && newData.val() === 'new') || (data.exists() && root.child('admins').child(auth.uid).val() === true && (newData.val() === 'new' || newData.val() === 'reviewing' || newData.val() === 'resolved' || newData.val() === 'dismissed'))"
+        },
+        "statusAt": {
+          ".validate": "root.child('admins').child(auth.uid).val() === true && newData.val() === now"
+        },
+        "statusBy": {
+          ".validate": "root.child('admins').child(auth.uid).val() === true && newData.val() === auth.uid"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "reportThrottle": {
+      /* When each resident last filed a report: one every thirty seconds.
+         Stamped by the server in the same write as the report, and never
+         deletable by its owner, so it cannot be reset to get round it. */
+      "$uid": {
+        ".read": "auth.provider === 'password' && auth.uid == $uid",
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $uid && newData.exists() && (!data.exists() || data.val() <= now - 30000)",
+        ".validate": "newData.isNumber() && newData.val() === now"
+      }
+    },
+    "hallBookings": {
+      /* Requests to book a seminar or poster hall. Private: an administrator
+         reads them all, a resident reads only their own (found through
+         bookingsByUser). Filed in the requester's own name, as "pending",
+         for the future, in whole quarter hours, at most twelve hours long.
+         Nothing about a booking can be changed afterwards except its status,
+         and only an administrator can change that. Approving must, in the
+         same write, take the hall's first and last quarter-hour slot
+         (hallSlots) and create the booking's notice (villageNotices). */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && root.child('admins').child(auth.uid).val() === true",
+      ".indexOn": ["createdAt", "status", "hallId"],
+      "$booking": {
+        ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && data.child('userId').val() === auth.uid",
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((!data.exists() && newData.child('userId').val() === auth.uid && newData.parent().parent().child('bookingThrottle').child(auth.uid).val() === now) || (data.exists() && !newData.exists() && data.child('userId').val() === auth.uid && data.child('status').val() === 'pending') || (data.exists() && root.child('admins').child(auth.uid).val() === true))",
+        ".validate": "newData.hasChildren(['bookingId','userId','name','institution','position','topic','abstract','hallId','hallType','eventType','date','startTime','endTime','startAt','endAt','status','createdAt']) && newData.child('endAt').val() > newData.child('startAt').val() && newData.child('endAt').val() - newData.child('startAt').val() <= 43200000 && (data.exists() || (newData.child('startAt').val() > now && newData.child('startAt').val() < now + 31622400000))",
+        "bookingId": { ".validate": "newData.val() === $booking" },
+        "userId": { ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())" },
+        "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val())" },
+        "institution": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120 && (!data.exists() || newData.val() === data.val())" },
+        "position": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val())" },
+        "topic": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 160 && (!data.exists() || newData.val() === data.val())" },
+        "abstract": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 1500 && (!data.exists() || newData.val() === data.val())" },
+        "extra": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 1000 && (!data.exists() || newData.val() === data.val())" },
+        "tz": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 64 && (!data.exists() || newData.val() === data.val())" },
+        "hallId": { ".validate": "(newData.val() === 'seminar-hall-a' || newData.val() === 'seminar-hall-b' || newData.val() === 'poster-hall' || newData.val() === 'poster-hall-2') && (!data.exists() || newData.val() === data.val())" },
+        "hallType": { ".validate": "((newData.val() === 'seminar' && (newData.parent().child('hallId').val() === 'seminar-hall-a' || newData.parent().child('hallId').val() === 'seminar-hall-b')) || (newData.val() === 'poster' && (newData.parent().child('hallId').val() === 'poster-hall' || newData.parent().child('hallId').val() === 'poster-hall-2'))) && (!data.exists() || newData.val() === data.val())" },
+        "eventType": { ".validate": "(newData.val() === 'seminar' || newData.val() === 'poster_presentation' || newData.val() === 'workshop' || newData.val() === 'conference' || newData.val() === 'research_discussion' || newData.val() === 'journal_club' || newData.val() === 'other') && (!data.exists() || newData.val() === data.val())" },
+        "date": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) && (!data.exists() || newData.val() === data.val())" },
+        "startTime": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{2}:[0-9]{2}$/) && (!data.exists() || newData.val() === data.val())" },
+        "endTime": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{2}:[0-9]{2}$/) && (!data.exists() || newData.val() === data.val())" },
+        "startAt": { ".validate": "newData.isNumber() && newData.val() % 900000 === 0 && (!data.exists() || newData.val() === data.val())" },
+        "endAt": { ".validate": "newData.isNumber() && newData.val() % 900000 === 0 && (!data.exists() || newData.val() === data.val())" },
+        "createdAt": { ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "status": { ".validate": "(!data.exists() && newData.val() === 'pending') || (data.exists() && newData.val() === data.val()) || (data.val() === 'pending' && newData.val() === 'rejected' && root.child('admins').child(auth.uid).val() === true) || (data.val() === 'approved' && newData.val() === 'cancelled' && root.child('admins').child(auth.uid).val() === true) || (data.val() === 'pending' && newData.val() === 'approved' && root.child('admins').child(auth.uid).val() === true && newData.parent().parent().parent().child('hallSlots').child(newData.parent().child('hallId').val()).child(newData.parent().child('startAt').val() + '').child('b').val() === $booking && newData.parent().parent().parent().child('hallSlots').child(newData.parent().child('hallId').val()).child((newData.parent().child('endAt').val() - 900000) + '').child('b').val() === $booking && newData.parent().parent().parent().child('villageNotices').child('b-' + $booking).child('bookingId').val() === $booking)" },
+        "approvedAt": { ".validate": "newData.isNumber() && newData.parent().child('status').val() !== 'pending' && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "decidedAt": { ".validate": "newData.isNumber() && newData.parent().child('status').val() !== 'pending' && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "decidedBy": { ".validate": "newData.isString() && newData.parent().child('status').val() !== 'pending' && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())" },
+        "cancelledAt": { ".validate": "newData.isNumber() && newData.parent().child('status').val() === 'cancelled' && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "noticeId": { ".validate": "newData.val() === 'b-' + $booking" },
+        "$other": { ".validate": false }
+      }
+    },
+    "bookingsByUser": {
+      /* Which bookings are whose, so a resident can find their own requests
+         without being able to read anybody else's. */
+      "$uid": {
+        ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (auth.uid == $uid || root.child('admins').child(auth.uid).val() === true)",
+        "$booking": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((auth.uid == $uid && (!newData.exists() || newData.parent().parent().parent().child('hallBookings').child($booking).child('userId').val() === auth.uid)) || (!newData.exists() && root.child('admins').child(auth.uid).val() === true))",
+          ".validate": "newData.val() === true"
+        }
+      }
+    },
+    "bookingThrottle": {
+      /* One booking request every thirty seconds per resident. */
+      "$uid": {
+        ".read": "auth.provider === 'password' && auth.uid == $uid",
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $uid && newData.exists() && (!data.exists() || data.val() <= now - 30000)",
+        ".validate": "newData.isNumber() && newData.val() === now"
+      }
+    },
+    "hallSlots": {
+      /* Who has each hall in each quarter hour: hallSlots/<hall>/<slot start,
+         ms> = { b: bookingId, t: slot start }. Written only when a booking is
+         approved, and only into a slot nobody holds — so two overlapping
+         bookings can never both be approved, however close together the two
+         approvals are. Readable by everyone, since it says only that a hall
+         is taken. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$hall": {
+        "$slot": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && root.child('admins').child(auth.uid).val() === true && (!data.exists() || !newData.exists())",
+          ".validate": "newData.hasChildren(['b','t']) && newData.child('t').val() + '' === $slot",
+          "b": { ".validate": "newData.isString() && newData.parent().parent().parent().parent().child('hallBookings').child(newData.val()).child('status').val() === 'approved' && newData.parent().parent().parent().parent().child('hallBookings').child(newData.val()).child('hallId').val() === $hall && newData.parent().parent().parent().parent().child('hallBookings').child(newData.val()).child('startAt').val() <= newData.parent().child('t').val() && newData.parent().parent().parent().parent().child('hallBookings').child(newData.val()).child('endAt').val() > newData.parent().child('t').val()" },
+          "t": { ".validate": "newData.isNumber() && newData.val() % 900000 === 0" },
+          "$other": { ".validate": false }
+        }
+      }
+    },
+    "villageNotices": {
+      /* The Village Notice Board: approved events only. Readable by everyone
+         signed in; created only by an administrator, and only together with
+         approving the booking or poster competition it advertises. The time
+         of an event cannot be changed, by anyone. Once an event has ended,
+         anybody may move it from "active" to "archived" — and nothing else. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      ".indexOn": ["startAt", "status"],
+      "$notice": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (root.child('admins').child(auth.uid).val() === true || (data.exists() && newData.exists() && data.child('endAt').isNumber() && data.child('endAt').val() <= now) || (data.exists() && newData.exists() && data.hasChild('competitionId') && newData.parent().parent().child('posterCompetitions').child(data.child('competitionId').val()).child('status').val() !== 'active'))",
+        ".validate": "newData.hasChildren(['noticeId','eventType','name','topic','hallId','startAt','status','createdAt']) && (newData.hasChild('bookingId') || newData.hasChild('competitionId'))",
+        "noticeId": { ".validate": "newData.val() === $notice" },
+        "bookingId": { ".validate": "newData.isString() && ((data.exists() && newData.val() === data.val()) || (!data.exists() && $notice === 'b-' + newData.val() && newData.parent().parent().parent().child('hallBookings').child(newData.val()).child('status').val() === 'approved' && root.child('hallBookings').child(newData.val()).child('status').val() === 'pending'))" },
+        "competitionId": { ".validate": "newData.isString() && ((data.exists() && newData.val() === data.val()) || (!data.exists() && $notice === 'c-' + newData.val() && newData.parent().parent().parent().child('posterCompetitions').child(newData.val()).exists() && !root.child('posterCompetitions').child(newData.val()).exists()))" },
+        "eventType": { ".validate": "(newData.val() === 'seminar' || newData.val() === 'poster_presentation' || newData.val() === 'poster_competition' || newData.val() === 'workshop' || newData.val() === 'conference' || newData.val() === 'research_discussion' || newData.val() === 'journal_club' || newData.val() === 'other') && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "institution": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 120 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "position": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "topic": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 160 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "abstract": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 1500 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "hallName": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 60 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "date": { ".validate": "newData.isString() && newData.val().length <= 10 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "startTime": { ".validate": "newData.isString() && newData.val().length <= 5 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "endTime": { ".validate": "newData.isString() && newData.val().length <= 5 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "tz": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 64 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+        "hallId": { ".validate": "(newData.val() === 'seminar-hall-a' || newData.val() === 'seminar-hall-b' || newData.val() === 'poster-hall' || newData.val() === 'poster-hall-2') && (!data.exists() || newData.val() === data.val())" },
+        "startAt": { ".validate": "newData.isNumber() && ((data.exists() && newData.val() === data.val()) || (!data.exists() && ((newData.parent().hasChild('bookingId') && newData.val() === newData.parent().parent().parent().child('hallBookings').child(newData.parent().child('bookingId').val()).child('startAt').val()) || (newData.parent().hasChild('competitionId') && newData.val() === now))))" },
+        "endAt": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && !data.exists()",
+          ".validate": "newData.isNumber() && ((data.exists() && newData.val() === data.val()) || (!data.exists() && ((newData.parent().hasChild('bookingId') && newData.val() === newData.parent().parent().parent().child('hallBookings').child(newData.parent().child('bookingId').val()).child('endAt').val()) || (newData.parent().hasChild('competitionId') && newData.val() === newData.parent().parent().parent().child('posterCompetitions').child(newData.parent().child('competitionId').val()).child('approvedAt').val() + 86400000))))"
+        },
+        "status": { ".validate": "(!data.exists() && newData.val() === 'active') || (data.exists() && newData.val() === data.val()) || (data.exists() && root.child('admins').child(auth.uid).val() === true && (newData.val() === 'active' || newData.val() === 'archived' || newData.val() === 'cancelled')) || (data.val() === 'active' && newData.val() === 'archived' && newData.parent().child('endAt').isNumber() && newData.parent().child('endAt').val() <= now) || (data.val() === 'active' && newData.val() === 'archived' && newData.parent().hasChild('competitionId') && newData.parent().parent().parent().child('posterCompetitions').child(newData.parent().child('competitionId').val()).child('status').val() !== 'active')" },
+        "createdAt": { ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "$other": { ".validate": false }
+      }
+    },
+    "posterEvents": {
+      /* Poster sessions residents register for (js/events.js). Created and
+         edited only by an administrator. cap1 and cap2 are how many stands
+         of the Poster Hall (12 at most) and the Grand Poster Hall (50 at
+         most) the event uses; 0 means the hall is not part of it. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      ".indexOn": ["startAt"],
+      "$eid": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && root.child('admins').child(auth.uid).val() === true",
+        ".validate": "newData.hasChildren(['title','startAt','endAt','cap1','cap2','status','createdAt']) && newData.child('endAt').val() > newData.child('startAt').val() && newData.child('cap1').val() + newData.child('cap2').val() >= 1",
+        "title": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 160" },
+        "description": { ".validate": "newData.isString() && newData.val().length <= 2000" },
+        "startAt": { ".validate": "newData.isNumber()" },
+        "endAt": { ".validate": "newData.isNumber()" },
+        "deadline": { ".validate": "newData.isNumber()" },
+        "cap1": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 12 && newData.val() % 1 === 0" },
+        "cap2": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 50 && newData.val() % 1 === 0" },
+        "status": { ".validate": "newData.val() === 'open' || newData.val() === 'closed' || newData.val() === 'cancelled' || newData.val() === 'archived'" },
+        "allowComp": { ".validate": "newData.isBoolean()" },
+        "needsApproval": { ".validate": "newData.isBoolean()" },
+        "createdAt": { ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "createdBy": { ".validate": "newData.isString() && newData.val().length <= 128" },
+        "updatedAt": { ".validate": "newData.isNumber() && newData.val() === now" },
+        "topic": { ".validate": "newData.isString() && newData.val().length <= 160" },
+        "venue": { ".validate": "newData.isString() && newData.val().length <= 300" },
+        "abstract": { ".validate": "newData.isString() && newData.val().length <= 1500" },
+        "orgName": { ".validate": "newData.isString() && newData.val().length <= 80" },
+        "orgInst": { ".validate": "newData.isString() && newData.val().length <= 120" },
+        "orgPos": { ".validate": "newData.isString() && newData.val().length <= 80" },
+        "organiserId": { ".validate": "newData.isString() && newData.val().length <= 128" },
+        "requestId": { ".validate": "newData.isString() && newData.val().length <= 64" },
+        "$other": { ".validate": false }
+      }
+    },
+    "posterEventRequests": {
+      /* A resident asking to organise a poster event. Private: an
+         administrator reads them all, a resident only their own (by querying
+         on userId). Filed as "pending" in the requester's own name, once
+         every thirty seconds. Nothing is published from here — approving
+         creates the event in posterEvents in the same write, and only then
+         does it reach the Notice Board. The requester may withdraw a pending
+         request; an administrator decides, and may delete any. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (root.child('admins').child(auth.uid).val() === true || (query.orderByChild === 'userId' && query.equalTo === auth.uid))",
+      ".indexOn": ["userId", "status", "createdAt"],
+      "$rid": {
+        ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && data.child('userId').val() === auth.uid",
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (root.child('admins').child(auth.uid).val() === true || (!data.exists() && newData.child('userId').val() === auth.uid && newData.parent().parent().child('posterEventReqThrottle').child(auth.uid).val() === now) || (data.exists() && !newData.exists() && data.child('userId').val() === auth.uid && data.child('status').val() === 'pending'))",
+        ".validate": "newData.hasChildren(['userId','name','institution','email','position','title','topic','description','startAt','endAt','venue','responsibilities','status','createdAt']) && newData.child('endAt').val() > newData.child('startAt').val()",
+        "userId": { ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())" },
+        "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val())" },
+        "institution": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120 && (!data.exists() || newData.val() === data.val())" },
+        "email": { ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 200 && newData.val().matches(/^[^@ ]+@[^@ ]+[.][^@ ]+$/) && (!data.exists() || newData.val() === data.val())" },
+        "position": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80 && (!data.exists() || newData.val() === data.val())" },
+        "title": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 160 && (!data.exists() || newData.val() === data.val())" },
+        "topic": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 160 && (!data.exists() || newData.val() === data.val())" },
+        "description": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 3000 && (!data.exists() || newData.val() === data.val())" },
+        "startAt": { ".validate": "newData.isNumber() && ((data.exists() && newData.val() === data.val()) || (!data.exists() && newData.val() > now))" },
+        "endAt": { ".validate": "newData.isNumber() && (!data.exists() || newData.val() === data.val())" },
+        "deadline": { ".validate": "newData.isNumber() && (!data.exists() || newData.val() === data.val())" },
+        "venue": { ".validate": "(newData.val() === 'poster-hall' || newData.val() === 'poster-hall-2' || newData.val() === 'both' || newData.val() === 'virtual' || newData.val() === 'other') && (!data.exists() || newData.val() === data.val())" },
+        "venueDetail": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 300 && (!data.exists() || newData.val() === data.val())" },
+        "posters": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 62 && newData.val() % 1 === 0 && (!data.exists() || newData.val() === data.val())" },
+        "comp": { ".validate": "newData.isBoolean() && (!data.exists() || newData.val() === data.val())" },
+        "abstract": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 1500 && (!data.exists() || newData.val() === data.val())" },
+        "extra": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 2000 && (!data.exists() || newData.val() === data.val())" },
+        "responsibilities": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 2000 && (!data.exists() || newData.val() === data.val())" },
+        "other": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 2000 && (!data.exists() || newData.val() === data.val())" },
+        "tz": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 64 && (!data.exists() || newData.val() === data.val())" },
+        "status": { ".validate": "(!data.exists() && newData.val() === 'pending') || (data.exists() && newData.val() === data.val()) || (root.child('admins').child(auth.uid).val() === true && data.val() === 'pending' && newData.val() === 'rejected') || (root.child('admins').child(auth.uid).val() === true && data.val() === 'pending' && newData.val() === 'approved' && newData.parent().parent().parent().child('posterEvents').child(newData.parent().child('eventId').val() + '').child('requestId').val() === $rid)" },
+        "createdAt": { ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "decidedAt": { ".validate": "newData.isNumber() && newData.parent().child('status').val() !== 'pending' && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+        "decidedBy": { ".validate": "newData.isString() && newData.parent().child('status').val() !== 'pending' && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())" },
+        "eventId": { ".validate": "newData.isString() && newData.val().length <= 64 && ((!data.exists() && root.child('admins').child(auth.uid).val() === true) || newData.val() === data.val())" },
+        "note": { ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 500 && root.child('admins').child(auth.uid).val() === true" },
+        "$other": { ".validate": false }
+      }
+    },
+    "posterEventRequestPdfs": {
+      /* The PDF made from a request when it was sent, kept apart so that
+         listing the requests does not download every PDF. Written once, by
+         the requester, alongside a request of theirs; read by them and the
+         administrators; gone with the request. */
+      "$rid": {
+        ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (root.child('admins').child(auth.uid).val() === true || root.child('posterEventRequests').child($rid).child('userId').val() === auth.uid)",
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (root.child('admins').child(auth.uid).val() === true || (!data.exists() && newData.exists() && newData.parent().parent().child('posterEventRequests').child($rid).child('userId').val() === auth.uid) || (data.exists() && !newData.exists() && root.child('posterEventRequests').child($rid).child('userId').val() === auth.uid && !newData.parent().parent().child('posterEventRequests').child($rid).exists()))",
+        ".validate": "newData.hasChildren(['d','at'])",
+        "d": { ".validate": "newData.isString() && newData.val().length <= 600000 && newData.val().beginsWith('data:application/pdf;base64,')" },
+        "at": { ".validate": "newData.isNumber() && newData.val() === now" },
+        "$other": { ".validate": false }
+      }
+    },
+    "posterEventReqThrottle": {
+      /* One poster event request every thirty seconds per resident. */
+      "$uid": {
+        ".read": "auth.provider === 'password' && auth.uid == $uid",
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $uid && newData.exists() && (!data.exists() || data.val() <= now - 30000)",
+        ".validate": "newData.isNumber() && newData.val() === now"
+      }
+    },
+    "posterRegs": {
+      /* One registration per resident per event, filed under their uid, so
+         registering twice cannot take a second stand. It carries the stand
+         it was given (hallId, num), and posterSlots points back at it: each
+         is only valid if the other agrees, in the same write. A resident may
+         register while the event is open and before its deadline, edit their
+         own wording afterwards, and cancel, which must free the stand in the
+         same write. Only an administrator can change the stand, the status,
+         or anyone else's registration. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$eid": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && root.child('admins').child(auth.uid).val() === true",
+        "$uid": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (root.child('admins').child(auth.uid).val() === true || (auth.uid == $uid && ((!data.exists() && newData.exists() && root.child('posterEvents').child($eid).child('status').val() === 'open' && root.child('posterEvents').child($eid).child('endAt').val() > now && (!root.child('posterEvents').child($eid).child('deadline').exists() || root.child('posterEvents').child($eid).child('deadline').val() > now)) || (data.exists() && newData.exists()) || (data.exists() && !newData.exists() && !newData.parent().parent().parent().child('posterSlots').child($eid).child(data.child('hallId').val()).child(data.child('num').val() + '').exists()))))",
+          ".validate": "newData.hasChildren(['uid','name','institution','position','title','mode','hallId','num','status','createdAt'])",
+          "uid": { ".validate": "newData.val() === $uid" },
+          "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80" },
+          "institution": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120" },
+          "position": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80" },
+          "affiliation": { ".validate": "newData.isString() && newData.val().length <= 160" },
+          "title": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 200" },
+          "abstract": { ".validate": "newData.isString() && newData.val().length <= 1500" },
+          "mode": { ".validate": "newData.val() === 'presentation' || (newData.val() === 'competition' && (root.child('posterEvents').child($eid).child('allowComp').val() === true || newData.val() === data.val()))" },
+          "hallId": { ".validate": "(newData.val() === 'poster-hall' || newData.val() === 'poster-hall-2') && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true)" },
+          "num": { ".validate": "newData.isNumber() && newData.val() % 1 === 0 && (!data.exists() || newData.val() === data.val() || root.child('admins').child(auth.uid).val() === true) && ((newData.val() === 0 && newData.parent().child('status').val() === 'rejected') || (newData.val() >= 1 && newData.parent().parent().parent().parent().child('posterSlots').child($eid).child(newData.parent().child('hallId').val()).child(newData.val() + '').val() === $uid && ((data.exists() && newData.val() === data.val() && newData.parent().child('hallId').val() === data.parent().child('hallId').val()) || (newData.parent().child('hallId').val() === 'poster-hall' && newData.val() <= root.child('posterEvents').child($eid).child('cap1').val()) || (newData.parent().child('hallId').val() === 'poster-hall-2' && newData.val() <= root.child('posterEvents').child($eid).child('cap2').val()))))" },
+          "status": { ".validate": "(!data.exists() && ((newData.val() === 'pending' && root.child('posterEvents').child($eid).child('needsApproval').val() === true) || (newData.val() === 'registered' && root.child('posterEvents').child($eid).child('needsApproval').val() !== true))) || (data.exists() && newData.val() === data.val()) || (root.child('admins').child(auth.uid).val() === true && (newData.val() === 'pending' || newData.val() === 'registered' || newData.val() === 'approved' || newData.val() === 'rejected'))" },
+          "createdAt": { ".validate": "newData.isNumber() && ((!data.exists() && newData.val() === now) || newData.val() === data.val())" },
+          "updatedAt": { ".validate": "newData.isNumber() && newData.val() === now" },
+          "$other": { ".validate": false }
+        }
+      }
+    },
+    "posterSlots": {
+      /* posterSlots/<event>/<hall>/<number> = the uid holding that stand.
+         A number is only ever taken if nobody holds it, so two residents
+         registering at the same instant can never share one: the second
+         write is refused and the page tries the next number. The number is
+         only valid if the holder's registration names exactly this hall and
+         number, which also keeps it within the hall's capacity. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$eid": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && root.child('admins').child(auth.uid).val() === true",
+        "$hall": {
+          "$num": {
+            ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (root.child('admins').child(auth.uid).val() === true || (!data.exists() && newData.val() === auth.uid) || (data.val() === auth.uid && !newData.exists() && !newData.parent().parent().parent().parent().child('posterRegs').child($eid).child(auth.uid).exists()))",
+            ".validate": "newData.isString() && ($hall === 'poster-hall' || $hall === 'poster-hall-2') && newData.parent().parent().parent().parent().child('posterRegs').child($eid).child(newData.val()).child('hallId').val() === $hall && newData.parent().parent().parent().parent().child('posterRegs').child($eid).child(newData.val()).child('num').val() + '' === $num"
+          }
+        }
+      }
+    },
+    "posterRegPosters": {
+      /* The poster a registered participant pins to their own stand. Only
+         they may put it up or change it, and only while they hold a stand;
+         they or an administrator may take it down. Kept until then — it does
+         not leave with its author the way an ordinary pinned poster does. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$eid": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && root.child('admins').child(auth.uid).val() === true",
+        "$uid": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ((root.child('admins').child(auth.uid).val() === true && !newData.exists()) || (auth.uid == $uid && (!newData.exists() || (root.child('posterRegs').child($eid).child($uid).child('num').val() >= 1 && root.child('posterRegs').child($eid).child($uid).child('status').val() !== 'rejected'))))",
+          ".validate": "newData.hasChildren(['s','at'])",
+          "s": { ".validate": "newData.isString() && newData.val().length <= 950000 && newData.val().beginsWith('data:image/')" },
+          "t": { ".validate": "newData.isString() && newData.val().length <= 200" },
+          "at": { ".validate": "newData.isNumber() && newData.val() === now" },
+          "$other": { ".validate": false }
+        }
+      }
+    },
+    "slides": {
+      /* The page a seminar hall is looking at right now, filed under whoever
+         is presenting. Only ever one page — the PDF itself never leaves the
+         presenter's browser — and armed with the same disconnect hook as the
+         chalk, so a hall empties its screen when the presenter leaves. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$room": {
+        "$uid": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $uid && (!newData.exists() || root.child('pins').child('boards').child($room).child('u').val() === auth.uid)",
+          ".validate": "newData.hasChildren(['s','i','n','at'])",
+          "s": {
+            ".validate": "newData.isString() && newData.val().length <= 900000"
+          },
+          "i": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5000"
+          },
+          "n": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5000"
+          },
+          "by": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "u": {
+            ".validate": "newData.isString() && newData.val() == auth.uid"
+          },
+          "at": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "posterLikes": {
+      /* One durable like per signed-in resident and poster. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$frame": {
+        "$uid": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $uid",
+          ".validate": "!newData.exists() || newData.val() === true"
+        }
+      }
+    },
+    "voiceLive": {
+      /* Who is speaking right now. Speech itself never comes through this
+         database: the audio rides a WebRTC connection straight between the two
+         browsers, and all that is kept here is a four-field note saying that
+         somebody is talking and where they stand, so listeners in earshot know
+         to open a connection. Each note carries onDisconnect().remove(), and is
+         deleted the moment the speaker stops. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$uid": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (auth.uid == $uid || (!newData.exists() && root.child('admins').child(auth.uid).val() === true))",
+        ".validate": "!newData.exists() || newData.hasChildren(['n','mode','at'])",
+        "uid": {
+          ".validate": "newData.isString() && newData.val() == auth.uid"
+        },
+        "n": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "mode": {
+          ".validate": "newData.isString() && (newData.val() === 'nearby' || newData.val() === 'village')"
+        },
+        "x": {
+          ".validate": "newData.isNumber()"
+        },
+        "z": {
+          ".validate": "newData.isNumber()"
+        },
+        "at": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "voiceSignal": {
+      /* WebRTC handshakes, addressed to a recipient. Anyone signed in may leave
+         an offer, an answer or an ICE candidate in somebody's inbox, and only
+         the owner of the inbox may read it — which they do once, deleting it in
+         the same breath. Nothing here outlives the few hundred milliseconds a
+         connection takes to come up, and none of it is audio. */
+      "$to": {
+        ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $to",
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $to",
+        "$from": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $from",
+          "$msg": {
+            ".validate": "!newData.exists() || newData.hasChildren(['t'])",
+            "t": {
+              ".validate": "newData.isString() && newData.val().length <= 8"
+            },
+            "d": {
+              ".validate": "newData.isString() && newData.val().length <= 20000"
+            },
+            "at": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    },
+    "dm": {
+      /* Private messages. One thread per pair, keyed "<a>~<b>" with a < b, and
+         only those two residents may read it or add to it. A message is
+         written once and never edited; either participant may delete one
+         (which is how month-old messages are tidied). Firebase uids never
+         contain "~", so the key cannot be forged to include a third party. */
+      "$pair": {
+        ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ($pair.beginsWith(auth.uid + '~') || $pair.endsWith('~' + auth.uid))",
+        "$msg": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && ($pair.beginsWith(auth.uid + '~') || $pair.endsWith('~' + auth.uid)) && (!data.exists() || !newData.exists())",
+          ".validate": "!newData.exists() || newData.hasChildren(['f','m','at'])",
+          "f": {
+            ".validate": "newData.isString() && newData.val() == auth.uid"
+          },
+          "m": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+          },
+          "at": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "dmInbox": {
+      /* "You have a private message from ...": set by the sender, read and
+         cleared only by the recipient. Nobody else can see who is writing to
+         whom. */
+      "$to": {
+        ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && auth.uid == $to",
+        "$from": {
+          ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && $from != $to && (auth.uid == $from || (auth.uid == $to && !newData.exists()))",
+          ".validate": "!newData.exists() || newData.hasChildren(['n','at'])",
+          "n": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "p": {
+            ".validate": "newData.isString() && newData.val().length <= 80"
+          },
+          "at": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "activities": {
+      /* What is happening in the village right now: a blackboard discussion, a
+         seminar, a poster going up. One record per organiser, filed under their
+         uid, carrying the topic and the place so the announcement can say
+         "Blackboard discussion on Dark Photons — Seminar Room Alpha" and offer
+         to walk you there. Armed with onDisconnect().remove(), so an activity
+         ends when its organiser leaves whether or not they remember to end it. */
+      ".read": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists()",
+      "$uid": {
+        ".write": "auth.provider === 'password' && !root.child('blocked').child(auth.uid).exists() && (auth.uid == $uid || (!newData.exists() && root.child('admins').child(auth.uid).val() === true) || (data.exists() && !newData.exists() && data.child('at').val() < (now - 14400000)))",
+        ".validate": "!newData.exists() || newData.hasChildren(['kind','at'])",
+        "uid": {
+          ".validate": "newData.isString() && newData.val() == auth.uid"
+        },
+        "kind": {
+          ".validate": "newData.isString() && newData.val().length <= 16"
+        },
+        "topic": {
+          ".validate": "newData.isString() && newData.val().length <= 90"
+        },
+        "where": {
+          ".validate": "newData.isString() && newData.val().length <= 48"
+        },
+        "by": {
+          ".validate": "newData.isString() && newData.val().length <= 64"
+        },
+        "x": {
+          ".validate": "newData.isNumber()"
+        },
+        "z": {
+          ".validate": "newData.isNumber()"
+        },
+        "at": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}

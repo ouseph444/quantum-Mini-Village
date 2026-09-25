@@ -1,0 +1,11 @@
+{
+  "//": "Emulator configuration for the rules tests. It points straight at the project's real rule files, so the tests cannot drift from what gets deployed.",
+  "database": { "rules": "../../database.rules.json" },
+  "firestore": { "rules": "../../firestore.rules" },
+  "emulators": {
+    "database": { "port": 9000 },
+    "firestore": { "port": 8080 },
+    "ui": { "enabled": false },
+    "singleProjectMode": true
+  }
+}

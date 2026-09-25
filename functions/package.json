@@ -1,0 +1,11 @@
+{
+  "name": "quantum-village-admin",
+  "description": "Privileged Firebase Authentication operations for Quantum Village. Nothing here ever reaches a browser.",
+  "private": true,
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  }
+}

@@ -1,0 +1,3168 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Quantum Mini Village</title>
+
+<meta name="description"
+      content="Explore the Quantum Mini Village — an interactive quantum-inspired virtual world.">
+
+<meta name="author"
+      content="ouseph444">
+
+<meta name="theme-color"
+      content="#100e0c">
+
+
+<!-- =========================================================
+     CANONICAL URL
+     ========================================================= -->
+
+<link rel="canonical"
+      href="https://ouseph444.github.io/quantum-Mini-Village/">
+
+
+<!-- =========================================================
+     OPEN GRAPH
+     WhatsApp · Facebook · iMessage · Slack · Discord · LinkedIn
+     ========================================================= -->
+
+<meta property="og:type"
+      content="website">
+
+<meta property="og:site_name"
+      content="Quantum Mini Village">
+
+<meta property="og:url"
+      content="https://ouseph444.github.io/quantum-Mini-Village/">
+
+<meta property="og:title"
+      content="Quantum Mini Village">
+
+<meta property="og:description"
+      content="Explore the Quantum Mini Village — an interactive quantum-inspired virtual world.">
+
+<meta property="og:image"
+      content="https://ouseph444.github.io/quantum-Mini-Village/Qunatum%20Village.png">
+
+<meta property="og:image:secure_url"
+      content="https://ouseph444.github.io/quantum-Mini-Village/Qunatum%20Village.png">
+
+<meta property="og:image:type"
+      content="image/png">
+
+<meta property="og:image:alt"
+      content="Quantum Mini Village">
+
+<meta property="og:image:width"
+      content="1200">
+
+<meta property="og:image:height"
+      content="630">
+
+<meta property="og:locale"
+      content="en_US">
+
+
+<!-- =========================================================
+     TWITTER / X
+     ========================================================= -->
+
+<meta name="twitter:card"
+      content="summary_large_image">
+
+<meta name="twitter:title"
+      content="Quantum Mini Village">
+
+<meta name="twitter:description"
+      content="Explore the Quantum Mini Village — an interactive quantum-inspired virtual world.">
+
+<meta name="twitter:image"
+      content="https://ouseph444.github.io/quantum-Mini-Village/Qunatum%20Village.png">
+
+<meta name="twitter:image:alt"
+      content="Quantum Mini Village">
+
+
+<!-- =========================================================
+     FAVICON
+     ========================================================= -->
+
+<link rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23100e0c'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23efe9dd' stroke-width='2'/%3E%3Cellipse cx='32' cy='32' rx='25' ry='10' fill='none' stroke='%239a4a35' stroke-width='2' transform='rotate(60 32 32)'/%3E%3Cellipse cx='32' cy='32' rx='25' ry='10' fill='none' stroke='%239a4a35' stroke-width='2' transform='rotate(-60 32 32)'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23efe9dd'/%3E%3C/svg%3E">
+
+
+<!-- =========================================================
+     FONT CONNECTIONS
+     ========================================================= -->
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin>
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+
+<!-- Existing Quantum Village fonts -->
+
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+
+<!-- Existing Mini Village fonts -->
+
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@200;300;400&display=swap">
+
+
+<!-- Main stylesheet -->
+
+<link rel="stylesheet"
+      href="css/style.css?v=2026-09-25-ride-1">
+
+
+<!-- =========================================================
+     EXISTING INLINE STYLES
+     ========================================================= -->
+
+<style>
+
+:root {
+  --bg: #100e0c;
+  --surface: #181512;
+  --surface-light: #211d18;
+  --text: #efe9dd;
+  --muted: #aaa198;
+  --accent: #9a4a35;
+  --border: rgba(239, 233, 221, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--text);
+}
+
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3029;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+
+/* Main container */
+
+.container {
+  width: min(1200px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+
+/* Typography */
+
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.title {
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.95;
+}
+
+.subtitle {
+  max-width: 650px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+
+/* Buttons */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 12px 22px;
+
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  background: transparent;
+  color: var(--text);
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.button:hover {
+  background: var(--surface-light);
+  border-color: rgba(239, 233, 221, 0.3);
+  transform: translateY(-1px);
+}
+
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.button.primary:hover {
+  filter: brightness(1.1);
+}
+
+
+/* Images */
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+
+/* Responsive */
+
+@media (max-width: 700px) {
+
+  .container {
+    width: min(100% - 28px, 1200px);
+  }
+
+  .title {
+    font-size: clamp(2.8rem, 15vw, 5rem);
+  }
+
+}
+
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     QUANTUM VILLAGE
+     ════════════════════════════════════════════════════════════════ -->
+
+
+<canvas id="scene"></canvas>
+
+<div id="tags"></div>
+
+
+<!-- ------------------------------------------------------------ top bar -->
+
+<div id="topbar">
+
+  <div class="brand">
+
+    <span class="mark" aria-hidden="true">
+
+      <svg width="22"
+           height="22"
+           viewBox="0 0 32 32"
+           fill="none">
+
+        <circle cx="16"
+                cy="16"
+                r="3"
+                fill="#E8B04B"/>
+
+        <ellipse cx="16"
+                 cy="16"
+                 rx="11"
+                 ry="4.6"
+                 stroke="#F4EBD8"
+                 stroke-width="1.6"/>
+
+        <ellipse cx="16"
+                 cy="16"
+                 rx="11"
+                 ry="4.6"
+                 stroke="#F4EBD8"
+                 stroke-width="1.6"
+                 transform="rotate(60 16 16)"/>
+
+        <ellipse cx="16"
+                 cy="16"
+                 rx="11"
+                 ry="4.6"
+                 stroke="#F4EBD8"
+                 stroke-width="1.6"
+                 transform="rotate(120 16 16)"/>
+
+      </svg>
+
+    </span>
+
+    <span class="brand-txt">
+
+      <b>Quantum Village</b>
+
+      <span>A campus · every open question</span>
+
+    </span>
+
+  </div>
+
+
+  <button class="scorepill"
+          data-panel="profile"
+          title="Your resident">
+
+    <svg width="17"
+         height="17"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="1.9"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+
+      <path d="M6 4h12v4a6 6 0 0 1-12 0V4Z"/>
+
+      <path d="M6 6H4a2 2 0 0 0 2 3M18 6h2a2 2 0 0 1-2 3"/>
+
+      <path d="M9 20h6M12 14v6"/>
+
+    </svg>
+
+    <b id="score">0</b>
+
+  </button>
+
+
+  <div class="rightstack">
+
+    <nav id="icons">
+
+      <button data-panel="archive"
+              title="The Archive"
+              aria-label="The Archive">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linejoin="round">
+
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5V5.5Z"/>
+
+          <path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5Z"/>
+
+        </svg>
+
+        <span id="newcount"></span>
+
+      </button>
+
+
+      <button data-panel="institutes"
+              title="Institutes"
+              aria-label="Institutes">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linejoin="round">
+
+          <path d="m12 3 9 5H3l9-5Z"/>
+
+          <path d="M5.5 8v9M9.5 8v9M14.5 8v9M18.5 8v9"/>
+
+          <path d="M3 20h18"/>
+
+        </svg>
+
+      </button>
+
+
+      <button data-panel="people"
+              title="Who's about"
+              aria-label="Who is about">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linejoin="round">
+
+          <circle cx="9"
+                  cy="8"
+                  r="3.2"/>
+
+          <path d="M2.5 20a6.5 6.5 0 0 1 13 0"/>
+
+          <path d="M16 5.6a3.2 3.2 0 0 1 0 5.8M17.6 14.4A6.5 6.5 0 0 1 21.5 20"/>
+
+        </svg>
+
+      </button>
+
+
+      <button data-panel="board"
+              title="Village standings"
+              aria-label="Standings">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linejoin="round">
+
+          <path d="M4 20h16"/>
+
+          <rect x="5"
+                y="11"
+                width="4"
+                height="9"/>
+
+          <rect x="10"
+                y="6"
+                width="4"
+                height="14"/>
+
+          <rect x="15"
+                y="14"
+                width="4"
+                height="6"/>
+
+        </svg>
+
+      </button>
+
+
+      <!-- Report / Feedback: from anywhere in the village, without leaving it. -->
+      <button id="report-btn"
+              type="button"
+              title="Report / Feedback"
+              aria-label="Report a problem or send feedback">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+          <path d="M5 21V4"/>
+
+          <path d="M5 4h11l-2 4 2 4H5"/>
+
+        </svg>
+
+      </button>
+
+
+      <button data-panel="help"
+              title="How the village works"
+              aria-label="Help">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linecap="round">
+
+          <circle cx="12"
+                  cy="12"
+                  r="9"/>
+
+          <path d="M9.6 9.4a2.5 2.5 0 1 1 3.3 2.4c-.6.2-.9.7-.9 1.3v.4"/>
+
+          <circle cx="12"
+                  cy="17"
+                  r=".9"
+                  fill="currentColor"/>
+
+        </svg>
+
+      </button>
+
+
+      <!-- Shown only to an administrator, and only because showing a
+           control that the security rules will refuse is bad manners. The
+           rules are what keeps everybody else out, not this attribute. -->
+      <button id="admin-btn"
+              hidden
+              title="Administration"
+              aria-label="Administration">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+          <path d="M12 3 4.5 6v5.5c0 4.3 3 8.2 7.5 9.5 4.5-1.3 7.5-5.2 7.5-9.5V6L12 3Z"/>
+
+          <path d="m9 12 2 2 4-4"/>
+
+        </svg>
+
+      </button>
+
+
+      <button id="signout-btn"
+              title="Sign out"
+              aria-label="Sign out">
+
+        <svg width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.7"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+          <path d="M14 4h3.5A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5H14"/>
+
+          <path d="m9 16-4-4 4-4"/>
+
+          <path d="M5 12h10"/>
+
+        </svg>
+
+      </button>
+
+    </nav>
+
+
+    <div class="phaseline">
+
+      <span class="dot"></span>
+
+      <span id="phase">Daylight</span>
+
+      <span class="sep">·</span>
+
+      <span id="clock">8:00am</span>
+
+      <span class="sep">·</span>
+
+      <span id="online">1 here</span>
+
+      <span class="sep">·</span>
+
+      <span id="backend" class="solo">Starting…</span>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="netbar"
+     role="status"
+     aria-live="polite"></div>
+
+
+<!-- --------------------------------------------------------- bottom left -->
+
+<div id="roomhud">
+  <div class="rh-main"></div>
+</div>
+<!-- In a poster hall: which mode it is in (normal, competition pending,
+     competition running) and what you can do about it. Its own panel, placed
+     by app.js clear of the chat box and the top bar. -->
+<div id="hallcomp" class="hc" hidden></div>
+
+
+<div id="placecard">
+
+  <span class="eyebrow">
+    Quantum Village · a small settlement
+  </span>
+
+  <h1 id="place-name">
+    The Commons
+  </h1>
+
+  <span id="place-sub">
+    Village green
+  </span>
+
+</div>
+
+
+<!-- -------------------------------------------------------------- chat -->
+
+<section id="chat"
+         class="min"
+         aria-label="Village talk">
+
+  <div id="chat-head">
+
+    <span class="eyebrow">
+      Village talk
+    </span>
+
+    <div id="voice-quick" class="voice-quick-controls">
+      <!-- Hearing the village and speaking to it are two different things.
+           This one only mutes the <audio> elements the other residents come
+           out of; it never touches the microphone, and the microphone never
+           touches it. -->
+      <button id="voice-listen"
+              class="btn voice-btn small voice-listen-btn"
+              type="button"
+              aria-pressed="true"
+              title="You can hear anyone speaking near you. Click to mute the village.">
+        <span class="ico" aria-hidden="true">🔊</span>
+        <span class="voice-label">Hear</span>
+      </button>
+      <button id="voice-toggle"
+              class="btn voice-btn small"
+              type="button"
+              aria-pressed="false"
+              title="Click to open your microphone, click again to mute. Hold 'V' for a quick word.">
+        <span class="voice-mic-icon">🎙️</span>
+        <span class="voice-label">Talk</span>
+      </button>
+      <!-- Text chat, as its own button beside the microphone. The log and
+           the box to type in fold away with the panel, and this is how to
+           find them again; the badge counts what was said meanwhile. -->
+      <button id="chat-open"
+              class="btn voice-btn small chat-open-btn"
+              type="button"
+              aria-controls="chat-log"
+              aria-expanded="false"
+              title="Open the text chat">
+        <span class="ico" aria-hidden="true">💬</span>
+        <span class="voice-label">Chat</span>
+        <span id="chat-unread" class="chat-unread" hidden>0</span>
+      </button>
+      <!-- Private one-to-one messages (js/private.js). The badge counts
+           residents whose messages you have not read yet. -->
+      <button id="dm-open"
+              class="btn voice-btn small dm-open-btn"
+              type="button"
+              aria-controls="pv-inbox"
+              title="Private messages">
+        <span class="ico" aria-hidden="true">✉️</span>
+        <span class="voice-label">Private</span>
+        <span id="dm-unread" class="chat-unread" hidden>0</span>
+      </button>
+      <button id="voice-mode"
+              class="btn ghost small voice-mode-btn"
+              type="button"
+              title="Nearby voice: only residents within 70 m hear you, and it fades with distance"
+              aria-label="Nearby voice — people within earshot hear you">
+        Nearby
+      </button>
+      <div id="voice-wave" class="voice-wave" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <button id="chat-toggle"
+            aria-label="Expand chat">
+      +
+    </button>
+
+  </div>
+
+
+  <div id="chat-log"></div>
+
+
+  <form id="chat-form">
+
+    <input id="chat-input"
+           class="field"
+           placeholder="Say something…"
+           maxlength="300"
+           autocomplete="off">
+
+    <button type="button"
+            class="btn small ghost"
+            id="chat-mode"
+            title="Only people near you will hear this">
+      Nearby
+    </button>
+
+    <button class="btn small">
+      Send
+    </button>
+
+  </form>
+
+</section>
+
+
+<!-- ------------------------------------------------------- bottom centre -->
+
+<div id="objective">
+
+  <span class="onote">
+    Where to next?
+  </span>
+
+  <b>
+    Click the ground to walk somewhere
+  </b>
+
+</div>
+
+
+<div id="hints">
+
+  <span>
+    <b>Click</b> the ground to walk
+  </span>
+
+  <span>
+    <b>Drag</b> to look
+  </span>
+
+  <span>
+    <b>E</b> to interact
+  </span>
+
+  <span>
+    <b>M</b> for the map
+  </span>
+
+</div>
+
+
+<div id="enter"></div>
+
+
+<button id="act-btn"
+        type="button"
+        aria-hidden="true">
+
+  <span class="act-ring"></span>
+
+  <span class="act-label">
+    Interact
+  </span>
+
+</button>
+
+
+<!-- ----------------------------------------------------------- side rail -->
+
+<div id="side">
+
+  <div id="mini-wrap"
+       title="Open the world map">
+
+    <canvas id="mini"
+            width="128"
+            height="128"></canvas>
+
+    <span>
+      World map
+    </span>
+
+  </div>
+
+
+  <div class="sidebtns">
+
+    <button class="sidebtn round"
+            id="zoom-in"
+            title="Zoom in"
+            aria-label="Zoom in">
+      +
+    </button>
+
+    <button class="sidebtn round"
+            id="zoom-out"
+            title="Zoom out"
+            aria-label="Zoom out">
+      −
+    </button>
+
+
+    <button class="sidebtn round"
+            id="weather-btn"
+            title="Weather"
+            aria-label="Change weather">
+
+      <svg width="15"
+           height="15"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round">
+
+        <path d="M7 16a4 4 0 0 1 .6-8 5.5 5.5 0 0 1 10.3 1.6A3.5 3.5 0 0 1 17.5 16H7Z"/>
+
+        <path d="M9 19.5 8 21M13 19.5 12 21M17 19.5 16 21"/>
+
+      </svg>
+
+    </button>
+
+
+    <button class="sidebtn round"
+            id="time-btn"
+            title="Time of day"
+            aria-label="Change time of day">
+
+      <svg width="15"
+           height="15"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round">
+
+        <circle cx="12"
+                cy="12"
+                r="4"/>
+
+        <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/>
+
+      </svg>
+
+    </button>
+
+
+    <button class="sidebtn round"
+            id="sound-btn"
+            title="Ambient sound (off)"
+            aria-label="Toggle ambient sound">
+
+      <svg width="15"
+           height="15"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+
+        <path d="M4 9v6h4l5 4V5L8 9H4Z"/>
+
+        <path d="M16.5 8.5a5 5 0 0 1 0 7"/>
+
+      </svg>
+
+    </button>
+
+  </div>
+
+
+  <div class="sidebtns">
+
+    <!-- The Village Notice Board: approved events, the whole village over. -->
+    <button class="sidebtn live-btn"
+            id="notices-btn"
+            type="button"
+            title="Village Notice Board — approved seminars, poster sessions and events">
+      Notices
+      <span id="notices-count"></span>
+    </button>
+
+    <button class="sidebtn live-btn"
+            id="live-btn"
+            title="Everything happening in the village right now">
+      Live
+      <span id="live-count"></span>
+    </button>
+
+  </div>
+
+
+  <div class="sidebtns">
+
+    <button class="sidebtn"
+            id="cam-mode"
+            title="Camera view">
+      Follow
+    </button>
+
+    <button class="sidebtn"
+            id="btn-enter"
+            title="Enter">
+      Enter
+    </button>
+
+
+    <!-- Appears only when there is a blackboard within reading distance.
+         It lives in the side rail rather than floating, so it cannot land
+         on top of the thumbstick or the action button on a phone. -->
+    <button class="sidebtn read-btn"
+            id="read-btn"
+            type="button"
+            hidden
+            title="Read what is written on the board (B)">
+
+      <span class="read-ico" aria-hidden="true">▤</span>
+
+      <span class="read-label">
+        Board
+      </span>
+
+    </button>
+
+
+    <!-- Appears only while you are standing in a seminar hall. Same rail,
+         same reasoning as the Board button: nothing in the layout is
+         allowed to sit on this column, so it can never land on the
+         thumbstick or the action button. -->
+    <button class="sidebtn read-btn"
+            id="slides-btn"
+            type="button"
+            hidden
+            title="Slides on the hall blackboard (P)">
+
+      <span class="read-ico" aria-hidden="true">▣</span>
+
+      <span class="read-label">
+        Slides
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <!-- The presenter's page turner. Shown only to whoever has a deck up, and
+       only while the slides panel is closed — so they can walk about the
+       hall, watch the room and still turn the page. -->
+  <div id="slidebar"
+       hidden>
+
+    <button id="sb-prev"
+            type="button"
+            class="sb-key"
+            aria-label="Previous page">◀</button>
+
+    <span id="sb-page"
+          class="sb-page">1 / 1</span>
+
+    <button id="sb-next"
+            type="button"
+            class="sb-key"
+            aria-label="Next page">▶</button>
+
+    <button id="sb-open"
+            type="button"
+            class="sb-txt">Panel</button>
+
+    <button id="sb-end"
+            type="button"
+            class="sb-txt sb-end">End</button>
+
+  </div>
+
+</div>
+
+
+<!-- ------------------------------------------------------------- sheet -->
+
+<aside id="sheet"
+       aria-label="Village panel">
+
+  <header>
+
+    <div>
+
+      <span class="eyebrow"
+            id="sheet-eyebrow"></span>
+
+      <h2 id="sheet-title">
+        Panel
+      </h2>
+
+    </div>
+
+    <button id="sheet-close"
+            aria-label="Close">
+      ✕
+    </button>
+
+  </header>
+
+  <div id="sheet-body"></div>
+
+</aside>
+
+
+<div id="sheet-scrim"></div>
+
+
+<div id="toast"></div>
+<div id="ride-hud" role="status" aria-live="polite" hidden></div>
+
+
+<!-- ------------------------------------------------------- paper modal -->
+
+<div id="paper-modal"
+     hidden
+     aria-modal="true"
+     role="dialog"
+     aria-labelledby="pm-title">
+
+  <div id="pm-scrim"></div>
+
+
+  <div id="pm-card">
+
+    <header>
+
+      <div>
+
+        <span class="eyebrow"
+              id="pm-eyebrow">
+          arXiv archive
+        </span>
+
+        <h2 id="pm-title">
+          Archive
+        </h2>
+
+        <p class="fine"
+           id="pm-blurb"></p>
+
+      </div>
+
+
+      <button id="pm-close"
+              aria-label="Close and return to the village">
+        ✕
+      </button>
+
+    </header>
+
+
+    <div id="pm-tabs"
+         class="tabs"
+         role="tablist">
+
+      <button class="on"
+              data-tab="reading"
+              role="tab">
+        Reading room
+      </button>
+
+      <button data-tab="listing"
+              role="tab">
+        arXiv listing
+      </button>
+
+      <a class="pm-out"
+         id="pm-open"
+         href="#"
+         target="_blank"
+         rel="noopener">
+        Open on arXiv ↗
+      </a>
+
+    </div>
+
+
+    <div id="pm-body">
+
+      <div id="pm-reading"></div>
+
+
+      <div id="pm-listing"
+           hidden>
+
+        <p class="pm-note fine"
+           id="pm-note"></p>
+
+        <iframe id="pm-frame"
+                title="arXiv archive listing"
+                referrerpolicy="no-referrer"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                src="about:blank">
+        </iframe>
+
+      </div>
+
+    </div>
+
+
+    <footer>
+
+      <button class="btn small"
+              id="pm-back"
+              type="button">
+        Back to the village
+      </button>
+
+    </footer>
+
+  </div>
+
+</div>
+
+
+<!-- ------------------------------------------------------------- touch -->
+
+<div id="touch">
+
+  <div id="stick">
+
+    <div id="stick-knob"></div>
+
+  </div>
+
+</div>
+
+
+<!-- ------------------------------------------------------------ welcome -->
+
+<div id="welcome"
+     class="overlay"
+     hidden>
+
+  <form id="welcome-form">
+
+    <h2>
+      Move in.
+    </h2>
+
+
+    <p class="lede">
+      A working research campus: institutes and laboratories, lecture halls and seminar rooms,
+      a library, a park, a station with real trains, and an old village at the middle of it all.
+      Tell the village who you are — all of it is editable later from your resident card.
+    </p>
+
+
+    <label>
+      Your name on the lane
+
+      <input id="w-name"
+             class="field"
+             maxlength="22"
+             placeholder="e.g. Melbin"
+             required
+             autocomplete="name">
+
+    </label>
+
+
+    <div class="row2">
+
+      <label>
+        Current position
+
+        <select id="w-title"
+                class="field">
+        </select>
+
+      </label>
+
+
+      <label>
+        Country
+
+        <input id="w-country"
+               class="field"
+               list="country-list"
+               maxlength="56"
+               placeholder="e.g. United Kingdom"
+               autocomplete="country-name">
+
+      </label>
+
+    </div>
+
+
+    <label>
+
+      Institution
+
+      <input id="w-inst"
+             class="field"
+             maxlength="90"
+             placeholder="e.g. University of Cambridge"
+             autocomplete="organization">
+
+    </label>
+
+
+    <label class="orcid-label">
+
+      <span class="lrow">
+
+        ORCID iD
+
+        <span class="opt">
+          optional
+        </span>
+
+      </span>
+
+
+      <span class="orcid-field">
+
+        <svg class="orcid-mark"
+             width="15"
+             height="15"
+             viewBox="0 0 256 256"
+             aria-hidden="true">
+
+          <circle cx="128"
+                  cy="128"
+                  r="128"
+                  fill="#A6CE39"/>
+
+          <path fill="#fff"
+                d="M86.3 186.2H70.9V79.1h15.4v107.1zM78.6 66.9a9.9 9.9 0 1 1 0-19.8 9.9 9.9 0 0 1 0 19.8zM108.9 79.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7 0-21.5-13.7-39.7-43.7-39.7h-23.7v79.4z"/>
+
+        </svg>
+
+
+        <input id="w-orcid"
+               class="field"
+               inputmode="numeric"
+               maxlength="19"
+               placeholder="0000-0000-0000-0000"
+               autocomplete="off"
+               pattern="\d{4}-\d{4}-\d{4}-\d{3}[\dXx]">
+
+      </span>
+
+
+      <span class="hint"
+            id="w-orcid-hint">
+        Sixteen digits, as printed on your ORCID record. We check it before you walk in.
+      </span>
+
+    </label>
+
+
+    <label>
+      Shirt
+    </label>
+
+
+    <div class="swatches"
+         id="w-swatches">
+    </div>
+
+
+    <label>
+      What you wear
+    </label>
+
+
+    <div class="lookchips"
+         id="w-outfits">
+    </div>
+
+
+    <button class="btn">
+      Walk in
+    </button>
+
+  </form>
+
+</div>
+
+
+<datalist id="country-list"></datalist>
+
+
+<!-- ---------------------------------------------------------------- ask -->
+
+<div id="ask"
+     class="overlay"
+     hidden>
+
+  <form id="ask-form">
+
+    <h2 id="ask-title">
+      Ask
+    </h2>
+
+
+    <label>
+
+      Your question
+
+      <input id="ask-input"
+             class="field"
+             maxlength="240"
+             autocomplete="off">
+
+    </label>
+
+
+    <div class="askrow">
+
+      <button class="btn"
+              type="submit">
+        Ask
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="ask-cancel">
+        Cancel
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- ---------------------------------------------------------------- board -->
+
+<div id="board"
+     class="overlay"
+     hidden>
+
+  <form id="board-form"
+        class="wide">
+
+    <h2>
+      Write on <span id="board-title">the board</span>
+    </h2>
+
+
+    <p class="lede">
+      Text and mathematics together. Put equations between dollar
+      signs — <code>$E = mc^2$</code> in a sentence, or <code>$$ … $$</code> on
+      a line of its own.
+    </p>
+
+
+    <label>
+
+      Chalk
+
+      <textarea id="board-input"
+                class="field"
+                rows="6"
+                maxlength="1200"
+                spellcheck="false"
+                placeholder="The action of the free field&#10;$$ S = \int d^4x \, \tfrac12 (\partial_\mu \phi)^2 $$"></textarea>
+
+    </label>
+
+
+    <label>
+
+      Pin a picture
+
+      <span class="opt">
+        optional — PNG, JPG or PDF
+      </span>
+
+      <input id="board-pic"
+             class="field"
+             type="file"
+             accept=".png,.jpg,.jpeg,.pdf,image/png,image/jpeg,application/pdf">
+
+    </label>
+
+
+    <p class="fine"
+       id="board-picnote">
+    </p>
+
+
+    <div id="board-preview"
+         class="boardprev"
+         aria-live="polite">
+    </div>
+
+
+    <div class="askrow">
+
+      <button class="btn"
+              type="submit">
+        Write it up
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="board-picoff">
+        Picture off
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="board-wipe">
+        Wipe the board
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="board-cancel">
+        Cancel
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- ---------------------------------------------------- administration -->
+<!-- Only an administrator is offered this, and only an administrator can
+     use it: both sets of security rules check admins/<uid> on the server
+     for every single write it makes. -->
+
+<div id="admin"
+     class="overlay"
+     hidden>
+
+  <div class="adm-card"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="admin-title">
+
+    <header class="adm-head">
+
+      <div class="adm-heads">
+
+        <span class="eyebrow">
+          Administration
+        </span>
+
+        <h2 id="admin-title">
+          Residents
+        </h2>
+
+        <span id="admin-note"
+              class="adm-note"></span>
+
+      </div>
+
+      <button id="admin-close"
+              class="br-close"
+              type="button"
+              aria-label="Close">
+        ✕
+      </button>
+
+    </header>
+
+
+    <nav class="adm-tabs"
+         role="tablist"
+         aria-label="Administration sections">
+
+      <button type="button"
+              role="tab"
+              data-tab="reports">
+        Reports <span class="adm-count"
+                      id="admin-count-reports"></span>
+      </button>
+
+      <button type="button"
+              role="tab"
+              data-tab="bookings">
+        Bookings <span class="adm-count"
+                       id="admin-count-bookings"></span>
+      </button>
+
+      <button type="button"
+              role="tab"
+              data-tab="comps">
+        Competitions <span class="adm-count"
+                           id="admin-count-comps"></span>
+      </button>
+
+      <button type="button"
+              role="tab"
+              data-tab="notices">
+        Notice Board
+      </button>
+
+      <button type="button"
+              role="tab"
+              data-tab="events">
+        Poster events <span class="adm-count"
+                            id="admin-count-events"></span>
+      </button>
+
+      <button type="button"
+              role="tab"
+              data-tab="residents">
+        Residents
+      </button>
+
+    </nav>
+
+
+    <div class="adm-body">
+
+      <!-- Reports and feedback. Readable only by an administrator — the
+           rules refuse reports/ to everybody else. -->
+      <section id="admin-reports"
+               class="adm-sec"
+               data-pane="reports"
+               hidden>
+
+        <div class="adm-filter">
+
+          <label for="admin-report-filter">
+            Show
+          </label>
+
+          <select id="admin-report-filter"
+                  class="field">
+            <option value="open">Open (new and reviewing)</option>
+            <option value="new">New</option>
+            <option value="reviewing">Reviewing</option>
+            <option value="resolved">Resolved</option>
+            <option value="dismissed">Dismissed</option>
+            <option value="all">All</option>
+          </select>
+
+        </div>
+
+        <ul id="admin-report-list"
+            class="adm-list"></ul>
+
+      </section>
+
+      <!-- Poster competitions waiting on an administrator. Approving is
+           checked by the rules against admins/<uid>, like everything else
+           here. -->
+      <section id="admin-comps"
+               class="adm-sec"
+               data-pane="comps"
+               hidden>
+
+        <div class="adm-filter">
+          <label for="admin-comp-filter">Show</label>
+          <select id="admin-comp-filter"
+                  class="field">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="all">All</option>
+          </select>
+        </div>
+
+        <ul id="admin-comp-list"
+            class="adm-list"></ul>
+
+      </section>
+
+      <!-- Hall bookings: private to the requester and administrators. -->
+      <section class="adm-sec"
+               data-pane="bookings"
+               hidden>
+
+        <div class="adm-filter">
+          <label for="admin-booking-filter">Show</label>
+          <select id="admin-booking-filter"
+                  class="field">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="all">All</option>
+          </select>
+        </div>
+
+        <ul id="admin-booking-list"
+            class="adm-list"></ul>
+
+      </section>
+
+      <!-- The Village Notice Board, as the village sees it. -->
+      <section class="adm-sec"
+               data-pane="notices"
+               hidden>
+
+        <div class="adm-filter">
+          <label for="admin-notice-filter">Show</label>
+          <select id="admin-notice-filter"
+                  class="field">
+            <option value="current">Now &amp; upcoming</option>
+            <option value="active">Happening now</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="archived">Archived</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="all">All</option>
+          </select>
+        </div>
+
+        <ul id="admin-notice-list"
+            class="adm-list"></ul>
+
+      </section>
+
+      <!-- Poster events: see js/events.js. -->
+      <section id="admin-events"
+               class="adm-sec"
+               data-pane="events"
+               hidden></section>
+
+      <section class="adm-sec"
+               data-pane="residents">
+
+        <div class="adm-filter adm-pickbar">
+          <input id="admin-res-search"
+                 class="field"
+                 type="search"
+                 placeholder="Find a resident"
+                 aria-label="Find a resident">
+        </div>
+
+        <ul id="admin-list"
+            class="adm-list"></ul>
+
+      </section>
+
+    </div>
+
+
+    <footer class="adm-foot"
+            data-pane="residents">
+
+      <p class="fine">
+        A block is written to <code>blocked/&lt;uid&gt;</code>, and every
+        rule in the database refuses a request from a uid that appears
+        there — so a blocked resident keeps their password and is given
+        nothing. Deleting the login itself needs the Cloud Function in
+        <code>functions/</code>; without it, Delete removes the profile
+        and blocks the account for good.
+      </p>
+
+    </footer>
+
+  </div>
+
+</div>
+
+
+<!-- ------------------------------------------------------ you are barred -->
+
+<div id="barred"
+     class="overlay"
+     hidden>
+
+  <div class="adm-card barred-card">
+
+    <header class="adm-head">
+
+      <div class="adm-heads">
+
+        <span class="eyebrow">
+          Quantum Village
+        </span>
+
+        <h2>
+          Your access has been withdrawn
+        </h2>
+
+      </div>
+
+    </header>
+
+
+    <div class="adm-body">
+
+      <p class="lede">
+        An administrator has blocked this account. You have been signed out,
+        and signing back in will not restore access.
+      </p>
+
+      <p class="lede"
+         id="barred-why"></p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ----------------------------------------------------- board reader -->
+<!-- Reading a blackboard, as opposed to walking up to one and squinting at
+     a texture on a wall. Press B, or use the button that appears beside the
+     action button when there is a board within reach. -->
+
+<div id="board-read"
+     class="overlay"
+     hidden>
+
+  <div class="br-card"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="br-title">
+
+    <header class="br-head">
+
+      <div class="br-heads">
+
+        <span class="eyebrow">
+          On the board
+        </span>
+
+        <h2 id="br-title">
+          the board
+        </h2>
+
+        <span id="br-by"
+              class="br-by"
+              hidden></span>
+
+      </div>
+
+      <button id="br-close"
+              class="br-close"
+              type="button"
+              aria-label="Close">
+        ✕
+      </button>
+
+    </header>
+
+
+    <div class="br-body">
+
+      <div id="br-pic"
+           class="br-pic"
+           hidden></div>
+
+      <div id="br-text"
+           class="br-text"></div>
+
+    </div>
+
+
+    <footer class="br-foot">
+
+      <button id="br-picopen"
+              class="btn small ghost"
+              type="button"
+              hidden>
+        Open the picture
+      </button>
+
+      <a id="br-picdl"
+         class="btn small ghost"
+         href="#"
+         title="Download the picture on this board"
+         hidden
+         download>
+        <span aria-hidden="true">⤓</span> Download
+      </a>
+
+      <button id="br-write"
+              class="btn small"
+              type="button"
+              hidden>
+        Write on it
+      </button>
+
+      <span class="br-hint">
+        <b>B</b> opens the board · <b>Esc</b> closes
+      </span>
+
+    </footer>
+
+  </div>
+
+</div>
+
+
+<!-- ---------------------------------------------------------- slides -->
+<!-- A deck on a seminar hall's blackboard. The presenter picks a PDF, it
+     goes up on the slate at full size, and every page turn lands on
+     everybody else's board in the same hall at the same moment. The PDF
+     itself never leaves the presenter's browser — only the page the hall
+     is looking at travels. -->
+
+<div id="slides"
+     class="overlay"
+     hidden>
+
+  <div class="br-card sl-card"
+       id="sl-card"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="sl-title">
+
+    <header class="br-head">
+
+      <div class="br-heads">
+
+        <span class="eyebrow">
+          On the blackboard
+        </span>
+
+        <h2 id="sl-title">
+          Seminar Hall
+        </h2>
+
+        <span id="sl-sub"
+              class="br-by"></span>
+
+      </div>
+
+      <button id="sl-close"
+              class="br-close"
+              type="button"
+              aria-label="Close">
+        ✕
+      </button>
+
+    </header>
+
+
+    <div class="br-body sl-body">
+
+      <div id="sl-view"
+           class="sl-view"
+           aria-live="polite">
+
+        <p class="sl-empty">
+          Nothing is on the board in this hall yet.
+        </p>
+
+      </div>
+
+      <label class="sl-pick">
+
+        <span id="sl-filelabel">
+          Put a deck up — PDF, PNG or JPG
+        </span>
+
+        <input id="sl-file"
+               class="field"
+               type="file"
+               accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">
+
+      </label>
+
+      <p class="fine"
+         id="sl-note"
+         hidden></p>
+
+    </div>
+
+
+    <footer class="br-foot sl-foot">
+
+      <button id="sl-prev"
+              class="btn small ghost"
+              type="button"
+              hidden>
+        ◀ Previous
+      </button>
+
+      <span id="sl-page"
+            class="sl-page"
+            hidden>—</span>
+
+      <button id="sl-next"
+              class="btn small"
+              type="button"
+              hidden>
+        Next ▶
+      </button>
+
+      <button id="sl-end"
+              class="btn small ghost"
+              type="button"
+              hidden>
+        Take it down
+      </button>
+
+      <span class="br-hint"
+            id="sl-hint">
+        Everyone in this hall sees the page the presenter is on.
+      </span>
+
+    </footer>
+
+  </div>
+
+</div>
+
+
+<!-- The wall. Nothing behind it is built until somebody signs in. -->
+
+<div id="gate"
+     hidden>
+
+  <form id="gate-form"
+        autocomplete="on">
+
+    <h1>
+      Quantum Village
+    </h1>
+
+
+    <p class="lede"
+       id="gate-lede">
+      A working research campus. Sign in to walk it.
+    </p>
+
+
+    <div class="gtabs"
+         role="tablist">
+
+      <button type="button"
+              class="gtab on"
+              id="gtab-in"
+              data-mode="in">
+        Sign in
+      </button>
+
+      <button type="button"
+              class="gtab"
+              id="gtab-up"
+              data-mode="up">
+        Create account
+      </button>
+
+    </div>
+
+
+    <label id="g-name-row"
+           hidden>
+
+      Name on the lane
+
+      <input id="g-name"
+             class="field"
+             maxlength="22"
+             autocomplete="nickname"
+             placeholder="e.g. Melbin">
+
+    </label>
+
+
+    <label>
+
+      Email
+
+      <input id="g-email"
+             class="field"
+             type="email"
+             autocomplete="email"
+             required
+             placeholder="you@institute.edu">
+
+    </label>
+
+
+    <label>
+
+      Password
+
+      <input id="g-pass"
+             class="field"
+             type="password"
+             autocomplete="current-password"
+             required
+             minlength="8"
+             placeholder="at least 8 characters">
+
+    </label>
+
+
+    <p class="gerr"
+       id="g-err"
+       hidden>
+    </p>
+
+
+    <button class="btn"
+            type="submit"
+            id="g-go">
+      Sign in
+    </button>
+
+
+    <button type="button"
+            class="linky"
+            id="g-reset">
+      Forgot your password?
+    </button>
+
+
+    <p class="fine"
+       id="g-note">
+      Your account is what carries your name, your shelf and your standing
+      between devices. The village cannot be entered without one.
+    </p>
+
+  </form>
+
+</div>
+
+
+<!-- book a seminar or poster hall -->
+
+<div id="booking"
+     class="overlay"
+     hidden>
+
+  <form id="bk-form"
+        class="wide"
+        novalidate>
+
+    <h2>
+      Book This Hall
+    </h2>
+
+
+    <p class="lede">
+      For a seminar, workshop, poster session, discussion or any other
+      research event. An administrator reviews every request; once it is
+      approved it goes on the Village Notice Board for everybody.
+    </p>
+
+
+    <div class="row2 bk-row">
+
+      <label>
+        Hall
+        <select id="bk-hall"
+                class="field"></select>
+      </label>
+
+      <label>
+        Event type
+        <select id="bk-type"
+                class="field"></select>
+      </label>
+
+    </div>
+
+
+    <label>
+      Full name
+      <input id="bk-name"
+             class="field"
+             maxlength="80"
+             autocomplete="name">
+    </label>
+
+
+    <div class="row2 bk-row">
+
+      <label>
+        Institution / organisation
+        <input id="bk-inst"
+               class="field"
+               maxlength="120"
+               autocomplete="organization">
+      </label>
+
+      <label>
+        Position / role
+        <input id="bk-pos"
+               class="field"
+               maxlength="80"
+               placeholder="Research Fellow">
+      </label>
+
+    </div>
+
+
+    <label>
+      Event title / topic
+      <input id="bk-topic"
+             class="field"
+             maxlength="160"
+             autocomplete="off"
+             placeholder="Quantum machine learning for particle physics">
+    </label>
+
+
+    <label>
+      Short abstract
+      <textarea id="bk-abs"
+                class="field"
+                rows="4"
+                placeholder="What it is about, and who should come"></textarea>
+    </label>
+
+
+    <div class="bk-when">
+
+      <label>
+        Date
+        <input id="bk-date"
+               class="field"
+               type="date"
+               placeholder="YYYY-MM-DD">
+      </label>
+
+      <!-- Lists, not time pickers: a time picker can look filled in while
+           its AM/PM part is still empty, and then it reports no time at all.
+           A list cannot be half chosen, and every entry is a quarter hour. -->
+      <label>
+        Start
+        <select id="bk-start"
+                class="field"></select>
+      </label>
+
+      <label>
+        End
+        <select id="bk-end"
+                class="field"></select>
+      </label>
+
+    </div>
+
+    <p class="hint"
+       id="bk-tz"></p>
+
+    <p class="bk-avail"
+       id="bk-avail"></p>
+
+
+    <label>
+      Additional information
+      <span class="opt">
+        optional — only the administrators see this
+      </span>
+      <textarea id="bk-extra"
+                class="field"
+                rows="2"></textarea>
+    </label>
+
+
+    <p class="gerr"
+       id="bk-err"
+       hidden>
+    </p>
+
+
+    <div class="askrow">
+
+      <button class="btn"
+              type="submit"
+              id="bk-go">
+        Send booking request
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="bk-cancel">
+        Cancel
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- register for a poster event (js/events.js) -->
+<div id="pe-reg"
+     class="overlay"
+     hidden>
+
+  <form id="pe-form"
+        class="wide"
+        novalidate>
+
+    <h2 id="pe-head">
+      Register for the poster session
+    </h2>
+
+    <p class="lede"
+       id="pe-event"></p>
+
+    <label>
+      Full name
+      <input id="pe-name"
+             class="field"
+             maxlength="80"
+             autocomplete="name">
+    </label>
+
+    <div class="row2 bk-row">
+      <label>
+        University / institution
+        <input id="pe-institution"
+               class="field"
+               maxlength="120"
+               autocomplete="organization">
+      </label>
+      <label>
+        Position
+        <input id="pe-position"
+               class="field"
+               maxlength="80"
+               placeholder="PhD student, postdoc, professor…">
+      </label>
+    </div>
+
+    <label>
+      Affiliation
+      <span class="opt">optional — group, department or collaboration</span>
+      <input id="pe-affiliation"
+             class="field"
+             maxlength="160">
+    </label>
+
+    <label>
+      Poster title
+      <input id="pe-title"
+             class="field"
+             maxlength="200"
+             autocomplete="off">
+    </label>
+
+    <label>
+      Short abstract
+      <span class="opt">optional, up to 1500 characters</span>
+      <textarea id="pe-abstract"
+                class="field"
+                rows="4"
+                maxlength="1500"></textarea>
+    </label>
+
+    <fieldset class="pe-mode">
+      <legend>Participation</legend>
+      <label class="pe-check">
+        <input id="pe-present"
+               type="checkbox"
+               checked>
+        Participate in Poster Presentation
+      </label>
+      <label class="pe-check"
+             id="pe-comp-row">
+        <input id="pe-comp"
+               type="checkbox">
+        Enter Poster Presentation Competition
+      </label>
+    </fieldset>
+
+    <label>
+      Poster hall
+      <select id="pe-hall"
+              class="field"></select>
+    </label>
+    <p class="hint"
+       id="pe-hall-note"></p>
+
+    <p class="gerr"
+       id="pe-err"
+       hidden>
+    </p>
+
+    <div class="askrow">
+      <button class="btn"
+              type="submit"
+              id="pe-go">
+        Register
+      </button>
+      <button class="btn ghost"
+              type="button"
+              id="pe-cancel">
+        Close
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- ask to organise a poster event (js/events.js). Nothing is published
+     until an administrator approves it. -->
+<div id="pereq"
+     class="overlay"
+     hidden>
+
+  <form id="pq-form"
+        class="wide pq-form"
+        novalidate>
+
+    <header class="pq-head">
+      <h2>Request a poster event</h2>
+      <p class="lede">
+        Propose a poster session for the village. An administrator reviews
+        every request, and only once it is approved does it go on the Notice
+        Board for residents to register. A PDF of your request is made when
+        you send it.
+      </p>
+    </header>
+
+    <fieldset class="pq-card">
+      <legend><span class="pq-n">1</span>About you</legend>
+      <div class="pq-grid">
+        <label>
+          <span class="pq-l">Full name</span>
+          <input id="pq-name" class="field" maxlength="80" autocomplete="name">
+        </label>
+        <label>
+          <span class="pq-l">Email</span>
+          <input id="pq-email" class="field" type="email" maxlength="200" autocomplete="email">
+        </label>
+        <label>
+          <span class="pq-l">Institution / organisation</span>
+          <input id="pq-institution" class="field" maxlength="120" autocomplete="organization">
+        </label>
+        <label>
+          <span class="pq-l">Position / role</span>
+          <input id="pq-position" class="field" maxlength="80" placeholder="Postdoc, group leader…">
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="pq-card">
+      <legend><span class="pq-n">2</span>The event</legend>
+      <label>
+        <span class="pq-l">Event title</span>
+        <input id="pq-title" class="field" maxlength="160" autocomplete="off"
+               placeholder="Spring poster session on open quantum systems">
+      </label>
+      <label>
+        <span class="pq-l">Topic</span>
+        <input id="pq-topic" class="field" maxlength="160" autocomplete="off"
+               placeholder="Open quantum systems and decoherence">
+      </label>
+      <label>
+        <span class="pq-l">Event description / information</span>
+        <textarea id="pq-description" class="field" rows="4" maxlength="3000"
+                  placeholder="What the session is, who it is for, and how it will run"></textarea>
+      </label>
+      <label>
+        <span class="pq-l">Short abstract <em class="opt">optional</em></span>
+        <textarea id="pq-abstract" class="field" rows="3" maxlength="1500"
+                  placeholder="A paragraph for the Notice Board"></textarea>
+      </label>
+    </fieldset>
+
+    <fieldset class="pq-card">
+      <legend><span class="pq-n">3</span>Date and time</legend>
+      <!-- A date box and a list of quarter hours for each moment, not a
+           combined date-and-time picker: that one looks filled in once a day
+           is picked but reports nothing until its time part is complete. -->
+      <div class="pq-grid pq-grid-dt">
+        <label>
+          <span class="pq-l">Start date</span>
+          <input id="pq-start-date" class="field" type="date">
+        </label>
+        <label>
+          <span class="pq-l">Start time</span>
+          <select id="pq-start-time" class="field"></select>
+        </label>
+        <label>
+          <span class="pq-l">End date</span>
+          <input id="pq-end-date" class="field" type="date">
+        </label>
+        <label>
+          <span class="pq-l">End time</span>
+          <select id="pq-end-time" class="field"></select>
+        </label>
+        <label>
+          <span class="pq-l">Deadline <em class="opt">optional</em></span>
+          <input id="pq-deadline-date" class="field" type="date">
+        </label>
+        <label>
+          <span class="pq-l">Deadline time</span>
+          <select id="pq-deadline-time" class="field"></select>
+        </label>
+      </div>
+      <p class="pq-when" id="pq-when" aria-live="polite"></p>
+      <p class="pq-help" id="pq-tz"></p>
+    </fieldset>
+
+    <fieldset class="pq-card">
+      <legend><span class="pq-n">4</span>Venue and format</legend>
+      <label>
+        <span class="pq-l">Venue</span>
+        <select id="pq-venue" class="field">
+          <option value="poster-hall">Poster Hall 1 · The Poster Hall · 12 stands</option>
+          <option value="poster-hall-2">Poster Hall 2 · The Grand Poster Hall · 50 stands</option>
+          <option value="both">Both poster halls · 62 stands</option>
+          <option value="virtual">Virtual (online)</option>
+          <option value="other">Another location</option>
+        </select>
+      </label>
+      <div class="pq-grid pq-grid-venue">
+        <label id="pq-vd-row">
+          <span class="pq-l">Venue details <em class="opt" id="pq-vd-tag">optional</em></span>
+          <input id="pq-venueDetail" class="field" maxlength="300" placeholder="A room, or a link for a virtual session">
+        </label>
+        <label>
+          <span class="pq-l">Expected posters <em class="opt">optional</em></span>
+          <input id="pq-posters" class="field" type="number" min="1" max="12" step="1" inputmode="numeric" placeholder="1–12">
+        </label>
+      </div>
+      <p class="pq-help" id="pq-vd-hint"></p>
+      <label class="pe-check">
+        <input id="pq-comp" type="checkbox">
+        Include a Poster Presentation Competition
+      </label>
+    </fieldset>
+
+    <fieldset class="pq-card">
+      <legend><span class="pq-n">5</span>Organiser responsibilities</legend>
+      <label>
+        <span class="pq-l">What you will take on</span>
+        <textarea id="pq-responsibilities" class="field" rows="3" maxlength="2000"
+                  placeholder="e.g. promoting the session, checking posters, chairing, judging the competition"></textarea>
+      </label>
+      <label class="pe-check">
+        <input id="pq-agree" type="checkbox">
+        I will take on the organiser responsibilities described above
+      </label>
+    </fieldset>
+
+    <fieldset class="pq-card">
+      <legend><span class="pq-n">6</span>Anything else <em class="opt">optional</em></legend>
+      <label>
+        <span class="pq-l">Additional information</span>
+        <textarea id="pq-extra" class="field" rows="2" maxlength="2000"
+                  placeholder="Anything the administrators should know"></textarea>
+      </label>
+      <label>
+        <span class="pq-l">Other event details</span>
+        <textarea id="pq-other" class="field" rows="2" maxlength="2000"
+                  placeholder="Sponsors, prizes, equipment, accessibility"></textarea>
+      </label>
+    </fieldset>
+
+    <div class="pq-actions">
+      <p class="gerr" id="pq-err" hidden></p>
+      <div class="askrow">
+        <button class="btn" type="submit" id="pq-go">Send request</button>
+        <button class="btn ghost" type="button" id="pq-cancel">Cancel</button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- report a problem, or send feedback -->
+
+<div id="report"
+     class="overlay"
+     hidden>
+
+  <form id="rp-form"
+        class="wide"
+        novalidate>
+
+    <h2>
+      Report / Feedback
+    </h2>
+
+
+    <p class="lede">
+      Abuse, something inappropriate, a bug, a problem with voice or chat,
+      or an idea. Only the village administrators can read it, and it is
+      kept until they deal with it.
+    </p>
+
+
+    <label>
+
+      Report type
+
+      <select id="rp-type"
+              class="field">
+        <option value="">Choose one…</option>
+        <option value="abuse">Abuse / inappropriate behaviour</option>
+        <option value="inappropriate_content">Inappropriate content</option>
+        <option value="technical_problem">Technical problem</option>
+        <option value="bug">Bug</option>
+        <option value="voice_chat">Voice chat issue</option>
+        <option value="text_chat">Text chat issue</option>
+        <option value="login">Login / authentication issue</option>
+        <option value="ui_problem">Display / UI problem</option>
+        <option value="other">Other feedback</option>
+      </select>
+
+    </label>
+
+
+    <p class="lede rp-subject"
+       id="rp-subject"
+       hidden></p>
+
+
+    <label>
+
+      Message
+
+      <textarea id="rp-msg"
+                class="field"
+                rows="7"
+                placeholder="What happened, where, and when. For a problem: what you did, what you expected, and what you saw instead."></textarea>
+
+      <span class="hint"
+            id="rp-count">0 / 5000</span>
+
+    </label>
+
+
+    <label>
+
+      Where in the village
+
+      <span class="opt">
+        filled in for you — change it if it is wrong
+      </span>
+
+      <input id="rp-where"
+             class="field"
+             maxlength="80"
+             autocomplete="off">
+
+    </label>
+
+
+    <p class="gerr"
+       id="rp-err"
+       hidden>
+    </p>
+
+
+    <div class="askrow">
+
+      <button class="btn"
+              type="submit"
+              id="rp-go">
+        Send report
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="rp-cancel">
+        Cancel
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- ask for a poster competition -->
+
+<div id="comp-req"
+     class="overlay"
+     hidden>
+
+  <form id="cr-form"
+        class="wide">
+
+    <h2>
+      Request a poster competition
+    </h2>
+
+
+    <p class="lede">
+
+      In <b id="cr-hall">the poster hall</b>. Once an administrator
+      approves it, the hall runs a competition for exactly 24 hours: every
+      poster pinned there stays up for the whole competition, even after
+      its author leaves.
+
+    </p>
+
+
+    <label>
+
+      Competition title
+
+      <input id="cr-title"
+             class="field"
+             maxlength="90"
+             autocomplete="off"
+             required
+             placeholder="Best poster on open quantum systems">
+
+    </label>
+
+
+    <div class="row2 cr-who">
+
+      <label>
+
+        Organiser
+
+        <input id="cr-name"
+               class="field"
+               maxlength="80"
+               autocomplete="name">
+
+      </label>
+
+      <label>
+
+        Position
+
+        <span class="opt">
+          optional
+        </span>
+
+        <input id="cr-pos"
+               class="field"
+               maxlength="80"
+               placeholder="Research Fellow">
+
+      </label>
+
+    </div>
+
+
+    <label>
+
+      Institution
+
+      <span class="opt">
+        optional
+      </span>
+
+      <input id="cr-inst"
+             class="field"
+             maxlength="120"
+             autocomplete="organization">
+
+    </label>
+
+
+    <label>
+
+      Short abstract
+
+      <span class="opt">
+        optional — shown on the Notice Board
+      </span>
+
+      <textarea id="cr-desc"
+                class="field"
+                maxlength="500"
+                rows="3"
+                placeholder="Who should enter, and what the judges look for"></textarea>
+
+    </label>
+
+
+    <label>
+
+      Preferred start
+
+      <span class="opt">
+        optional — the 24 hours begin when it is approved
+      </span>
+
+      <input id="cr-when"
+             class="field"
+             type="datetime-local">
+
+    </label>
+
+
+    <p class="gerr"
+       id="cr-err"
+       hidden>
+    </p>
+
+
+    <div class="askrow">
+
+      <button class="btn"
+              type="submit"
+              id="cr-go">
+        Send request
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="cr-cancel">
+        Cancel
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- pin a poster -->
+
+<div id="poster-pin"
+     class="overlay"
+     hidden>
+
+  <form id="pp-form"
+        class="wide">
+
+    <h2 id="pp-head">
+      Pin up a poster
+    </h2>
+
+
+    <p class="lede pp-comp"
+       id="pp-comp"
+       hidden></p>
+
+
+    <p class="lede">
+
+      On <b id="pp-where">the board</b>.
+      A PNG, a JPG or a PDF —
+      a PDF goes up as its first page.
+
+    </p>
+
+
+    <label>
+
+      The file
+
+      <input id="pp-file"
+             class="field"
+             type="file"
+             accept=".png,.jpg,.jpeg,.pdf,image/png,image/jpeg,application/pdf">
+
+    </label>
+
+
+    <label>
+
+      Title
+
+      <span class="opt">
+        mathematics between dollar signs
+      </span>
+
+      <input id="pp-title"
+             class="field"
+             maxlength="160"
+             autocomplete="off"
+             placeholder="Bounds on $\Lambda_{\rm QCD}$ from lattice data">
+
+    </label>
+
+
+    <div class="ppprev"
+         id="pp-prev">
+    </div>
+
+
+    <p class="gerr"
+       id="pp-err"
+       hidden>
+    </p>
+
+
+    <div class="askrow">
+
+      <button class="btn"
+              type="submit"
+              id="pp-go">
+        Pin it up
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="pp-down">
+        Take down
+      </button>
+
+      <button class="btn ghost"
+              type="button"
+              id="pp-cancel">
+        Cancel
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- read one full size -->
+
+<div id="poster-view"
+     hidden>
+
+  <div class="pvbox">
+
+    <img id="pv-img"
+         alt="Poster">
+
+
+    <div class="pvbar">
+
+      <div>
+
+        <b id="pv-title"></b>
+
+        <span id="pv-by"
+              class="fine">
+        </span>
+
+      </div>
+
+
+      <div class="pv-actions">
+
+        <button class="btn small"
+                type="button"
+                id="pv-like">
+          ♥ Like (0)
+        </button>
+
+        <!-- the poster file itself, exactly as it is stored -->
+        <button class="btn ghost small pv-save"
+                type="button"
+                id="pv-save"
+                title="Download this poster"
+                aria-label="Download this poster"
+                hidden>
+          <span aria-hidden="true">⤓</span> Download
+        </button>
+
+        <!-- only shown to whoever pinned it: taking it down frees the stand -->
+        <button class="btn ghost small"
+                type="button"
+                id="pv-down"
+                hidden>
+          Take down
+        </button>
+
+        <button class="btn ghost small"
+                type="button"
+                id="pv-report"
+                title="Report this poster to an administrator">
+          Report
+        </button>
+
+        <button class="btn ghost small"
+                type="button"
+                id="pv-close">
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ----------------------------------------------- live announcements -->
+
+<div id="announce"
+     role="status"
+     aria-live="polite"></div>
+
+
+<!-- -------------------------------------------------- live activities -->
+
+<div id="acts"
+     aria-hidden="true"
+     aria-label="Live activities">
+
+  <div class="acts-head">
+
+    <div>
+
+      <span class="eyebrow">
+        Right now
+      </span>
+
+      <h2>
+        Live activities
+      </h2>
+
+    </div>
+
+    <button type="button"
+            id="acts-close"
+            aria-label="Close">
+      &times;
+    </button>
+
+  </div>
+
+  <div id="acts-list"></div>
+
+  <p class="fine acts-foot">
+    Take a blackboard, stand up in a seminar room or pin a poster and your
+    activity appears here for everybody.
+  </p>
+
+</div>
+
+
+<!-- ------------------------------------------------------- arrival tour -->
+
+<div id="tour"
+     aria-live="polite"></div>
+
+
+<div id="loading">
+
+  <div>
+
+    <h1>
+      Quantum Village
+    </h1>
+
+    <p>
+      Laying the roads…
+    </p>
+
+    <div class="spinner"></div>
+
+  </div>
+
+</div>
+
+
+<!-- ------------------------------------------------------------ scripts -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script src="js/firebase-config.js"></script>
+
+
+<script>
+
+/*
+ Load the Firebase SDK only when a real config is present, so the village
+ also runs as a plain static page with no back end at all.
+*/
+
+window.QV_LIBS = (function () {
+
+  var cfg = window.QV_FIREBASE_CONFIG;
+
+  if (!cfg ||
+      !cfg.apiKey ||
+      cfg.apiKey.indexOf("PASTE") === 0 ||
+      !cfg.projectId) {
+
+    return Promise.resolve(false);
+
+  }
+
+
+  var base =
+    "https://www.gstatic.com/firebasejs/10.12.2/";
+
+
+  var files = [
+    "firebase-app-compat.js",
+    "firebase-auth-compat.js",
+    "firebase-firestore-compat.js",
+    "firebase-database-compat.js"
+  ];
+
+
+  return files.reduce(function (p, f) {
+
+    return p.then(function () {
+
+      return new Promise(function (res, rej) {
+
+        var s =
+          document.createElement("script");
+
+        s.src =
+          base + f;
+
+        s.onload =
+          res;
+
+        s.onerror =
+          rej;
+
+        document.head.appendChild(s);
+
+      });
+
+    });
+
+  }, Promise.resolve())
+
+  .then(function () {
+
+    return true;
+
+  })
+
+  .catch(function () {
+
+    console.warn(
+      "[village] Firebase SDK did not load; running without it."
+    );
+
+    return false;
+
+  });
+
+})();
+
+</script>
+
+
+<!--
+ Load order matters: papers is data, net has no dependencies, engine
+ defines the primitives every world module builds on, and app.js wires
+ the finished pieces together last.
+-->
+
+<script src="js/papers.js?v=2026-09-23"></script>
+
+<script src="js/net.js?v=2026-09-25-private-1"></script>
+
+<script src="js/voice.js?v=2026-09-25-private-1"></script>
+
+<script src="js/private.js?v=2026-09-25-private-1"></script>
+
+<script src="js/engine.js?v=chibi-1"></script>
+
+<script src="js/board.js?v=2026-09-25-dl1"></script>
+
+<script src="js/posters.js?v=2026-09-25-dl1"></script>
+
+<script src="js/slides.js?v=2026-09-23-pins"></script>
+
+<script src="js/restaurant.js?v=refectory-2"></script>
+
+<script src="js/village.js?v=jeep-1"></script>
+
+<script src="js/campus.js?v=ride-1"></script>
+
+<script src="js/transport.js?v=ride-1"></script>
+
+<script src="js/ambient.js?v=animals-bike-chibi-1"></script>
+
+<script src="js/activities.js?v=activities-1"></script>
+<script src="js/tour.js?v=tour-2-jeep"></script>
+<script src="js/interact.js?v=2026-09-21"></script>
+
+<script src="js/admin.js?v=2026-09-24-nb1"></script>
+
+<script src="js/events.js?v=2026-09-25-ride-1"></script>
+
+<script src="js/rooms.js?v=speak-1"></script>
+
+<script src="js/archives.js"></script>
+
+<script src="js/bubbles.js?v=bubbles-1"></script>
+<script src="js/app.js?v=2026-09-25-private-1"></script>
+
+
+</body>
+</html>

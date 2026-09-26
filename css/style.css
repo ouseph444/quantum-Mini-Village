@@ -39,7 +39,7 @@ a{color:inherit}
 ::-webkit-scrollbar-thumb{background:rgba(232,217,176,.22);border-radius:9px}
 ::-webkit-scrollbar-track{background:transparent}
 
-#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;z-index:0;cursor:pointer}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;z-index:0;cursor:pointer;filter:saturate(1.5)}
 #tags{position:fixed;inset:0;z-index:2;pointer-events:none}
 
 .eyebrow{

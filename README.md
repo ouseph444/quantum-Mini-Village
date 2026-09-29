@@ -9,7 +9,7 @@ the page open.
 Plain static files — no build step, no bundler, no npm. Drop it on GitHub
 Pages and it works.
 
-![The Commons on arrival: the village green, the painted Quantum Village sign, residents, the world map and the Village Talk bar](screenshots/Intro.png)
+![The Commons on arrival: the village green, the painted Quantum Village sign, residents, the world map and the Village Talk bar](screenshots/Intro.jpg)
 
 *The Commons, on arrival — the sign, the cycle station, whoever else has the page open, and the talk bar along the bottom.*
 
@@ -88,7 +88,7 @@ their own attire — lab coat, blazer, cardigan, shirt and tie, turtleneck,
 hoodie, kurta, t-shirt, academic gown or suit — along with a hairstyle,
 glasses, a beard and a satchel.
 
-![The Poster Hall: research posters hung along a wall, with residents reading them](screenshots/Poster1.png)
+![The Poster Hall: research posters hung along a wall, with residents reading them](screenshots/Poster1.jpg)
 
 *A poster hall on North Campus.*
 
@@ -289,7 +289,7 @@ Hold **V**, or click the microphone button beside the chat box, and the
 village hears you *while you are speaking*. There is no recording step, no
 upload and no playback of a file.
 
-![Seminar Hall Beta with a results slide on the board and an indicator reading Dr Joe is speaking](screenshots/Seminar2a.png)
+![Seminar Hall Beta with a results slide on the board and an indicator reading Dr Joe is speaking](screenshots/Seminar2a.jpg)
 
 *Holding **V** in a hall: the village is told who is speaking, while they are speaking.*
 
@@ -367,7 +367,7 @@ A blackboard is a texture on a wall three metres up. It looks right and it is
 unreadable, and zooming the camera into a wall is not reading. So the writing
 is kept as text as well as chalk, and there is a way to look at the text.
 
-![An outdoor chalkboard on the village outskirts carrying a typeset decay-rate equation](screenshots/Board.png)
+![An outdoor chalkboard on the village outskirts carrying a typeset decay-rate equation](screenshots/Board.jpg)
 
 *An outdoor blackboard on the outskirts. This is the chalk — **B** brings the same writing up at a size made for eyes.*
 
@@ -476,7 +476,7 @@ they protect nothing — the rules do.
 
 ## Talk is not kept
 
-![Three residents on the village green with the Village Talk panel open, showing two messages and a speech bubble overhead](screenshots/Chat.png)
+![Three residents on the village green with the Village Talk panel open, showing two messages and a speech bubble overhead](screenshots/Chat.jpg)
 
 *Village talk: lines in flight between whoever has the page open, and the same line overhead.*
 
@@ -510,7 +510,7 @@ north-west beyond the residences and **Seminar Hall β** south-east beyond the
 research park, each with its own footpath in from the nearest lane and
 nothing around it to be quiet for.
 
-![Seminar Hall Beta: tiered desks facing a large blackboard showing the opening slide of a deck](screenshots/Seminar1.png)
+![Seminar Hall Beta: tiered desks facing a large blackboard showing the opening slide of a deck](screenshots/Seminar1.jpg)
 
 *Seminar Hall β — tiers of chairs, every one facing the board, and the board doubling as the screen.*
 
@@ -533,7 +533,7 @@ machine straight up on the slate at full size. **Next** and **Previous** turn
 the page, and the moment you turn one, everybody else in the hall is looking
 at the same page, on their board and in their own panel.
 
-![The on-the-blackboard slide panel showing page 5 of 46, with a note that everyone in the hall sees the presenter's page](screenshots/Seminar3.png)
+![The on-the-blackboard slide panel showing page 5 of 46, with a note that everyone in the hall sees the presenter's page](screenshots/Seminar3.jpg)
 
 *The same page, in a resident's own panel.*
 
@@ -571,7 +571,7 @@ board, or pin a poster, and the village is told what you are doing and where
 — *"Blackboard discussion on Dark Photons — Seminar Hall Alpha"*. The notice slides in under the top bar
 with a button that walks you there.
 
-![A notification card under the top bar reading Blackboard Discussion, starting now, with Take me there and Later buttons](screenshots/Live%20Notifications.png)
+![A notification card under the top bar reading Blackboard Discussion, starting now, with Take me there and Later buttons](screenshots/Live%20Notifications.jpg)
 
 *The notice slides in under the top bar; **Take me there** walks you to it.*
 

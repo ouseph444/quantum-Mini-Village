@@ -1,0 +1,428 @@
+{
+  ".claude-flow/harness-active-policy.json": {
+    "mtime": 1790063696.4551165,
+    "seen": 1790399457.64756,
+    "ast_hash": "0f17e2bfa026402e22e81fa973c3f278",
+    "semantic_hash": ""
+  },
+  ".claude-flow/neural/patterns.json": {
+    "mtime": 1790334587.5528576,
+    "seen": 1790399457.647572,
+    "ast_hash": "8643113656749feec2b8d940d1a0217e",
+    "semantic_hash": ""
+  },
+  ".claude-flow/neural/stats.json": {
+    "mtime": 1790390282.8879876,
+    "seen": 1790399457.647582,
+    "ast_hash": "1d579af083b606c02046bb8023be4d32",
+    "semantic_hash": ""
+  },
+  ".claude/proven-config.json": {
+    "mtime": 1790063696.4539742,
+    "seen": 1790399457.647583,
+    "ast_hash": "889f748b080472b9e91d23dd2c03bdaf",
+    "semantic_hash": ""
+  },
+  ".swarm/ewc-fisher.json": {
+    "mtime": 1790390282.8868172,
+    "seen": 1790399457.6475909,
+    "ast_hash": "78e1c5d037c67a4f7334cba98c0d7b35",
+    "semantic_hash": ""
+  },
+  "database.rules.json": {
+    "mtime": 1790334231.9417708,
+    "seen": 1790399457.6475918,
+    "ast_hash": "a22d42e9a8898bed91e633a2811429d5",
+    "semantic_hash": ""
+  },
+  "firebase.json": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.647594,
+    "ast_hash": "90904d8a8ae6699805d2c6d74b31d57b",
+    "semantic_hash": ""
+  },
+  "functions/index.js": {
+    "mtime": 1790243540.544282,
+    "seen": 1790399457.647595,
+    "ast_hash": "bb4a0fff867192561bdf52fd4b51cf44",
+    "semantic_hash": ""
+  },
+  "functions/package.json": {
+    "mtime": 1790243540.5460532,
+    "seen": 1790399457.6475961,
+    "ast_hash": "e52f868692b2f776087bde30e144ae1e",
+    "semantic_hash": ""
+  },
+  "js/activities.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.647597,
+    "ast_hash": "30aeaaa2dfbac153cdfda065091b4a1c",
+    "semantic_hash": ""
+  },
+  "js/admin.js": {
+    "mtime": 1790249790.5122855,
+    "seen": 1790399457.647598,
+    "ast_hash": "e627d38aac3d8adad575eaaaef984431",
+    "semantic_hash": ""
+  },
+  "js/ambient.js": {
+    "mtime": 1790305787.231248,
+    "seen": 1790399457.6476002,
+    "ast_hash": "7b6b5dd6fa523887afae0cee96a52eb8",
+    "semantic_hash": ""
+  },
+  "js/app.js": {
+    "mtime": 1790334439.9999216,
+    "seen": 1790399457.647601,
+    "ast_hash": "177d2e3eab262b06d1a159f4b6db2de1",
+    "semantic_hash": ""
+  },
+  "js/archives.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.6476018,
+    "ast_hash": "8e301be40f460ef338103155a069332b",
+    "semantic_hash": ""
+  },
+  "js/board.js": {
+    "mtime": 1790300142.227549,
+    "seen": 1790399457.647603,
+    "ast_hash": "4aaa12c103262f4208cddad212f51b84",
+    "semantic_hash": ""
+  },
+  "js/bubbles.js": {
+    "mtime": 1790318201.6297665,
+    "seen": 1790399457.647604,
+    "ast_hash": "1514c65c486941c38eb0f95aa01418d3",
+    "semantic_hash": ""
+  },
+  "js/campus.js": {
+    "mtime": 1790321599.6855233,
+    "seen": 1790399457.6476061,
+    "ast_hash": "7248e7079e487225074a8dfb8298a0d0",
+    "semantic_hash": ""
+  },
+  "js/engine.js": {
+    "mtime": 1790305173.5279555,
+    "seen": 1790399457.647607,
+    "ast_hash": "2e627a83410881908aaaedf982201d7b",
+    "semantic_hash": ""
+  },
+  "js/events.js": {
+    "mtime": 1790313506.2037055,
+    "seen": 1790399457.647608,
+    "ast_hash": "5fe77a6f4c4b5679ceff2e5a40be729e",
+    "semantic_hash": ""
+  },
+  "js/firebase-config.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.647609,
+    "ast_hash": "231d7851c407f07c3aeb415419fc6567",
+    "semantic_hash": ""
+  },
+  "js/interact.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.6476102,
+    "ast_hash": "401be64dfadeee3124e63f65b5b581b8",
+    "semantic_hash": ""
+  },
+  "js/net.js": {
+    "mtime": 1790334217.0948565,
+    "seen": 1790399457.647611,
+    "ast_hash": "857dc216dd8a111d869ce5e2cf1cff4e",
+    "semantic_hash": ""
+  },
+  "js/papers.js": {
+    "mtime": 1790129951.6434326,
+    "seen": 1790399457.6476128,
+    "ast_hash": "b6d45e09983baf1bef9c8cd6374c0972",
+    "semantic_hash": ""
+  },
+  "js/posters.js": {
+    "mtime": 1790300127.5877044,
+    "seen": 1790399457.647614,
+    "ast_hash": "b71cf145d2fe472102498e396b413e1a",
+    "semantic_hash": ""
+  },
+  "js/private.js": {
+    "mtime": 1790334402.0943787,
+    "seen": 1790399457.647615,
+    "ast_hash": "83e018dabad3d16aaa6a3693629bea49",
+    "semantic_hash": ""
+  },
+  "js/restaurant.js": {
+    "mtime": 1790307626.3014293,
+    "seen": 1790399457.647616,
+    "ast_hash": "b79b145e052b2f27dce54b6fc8bc7100",
+    "semantic_hash": ""
+  },
+  "js/rooms.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.647617,
+    "ast_hash": "d19610fde515788b13aa8b28ebcd039b",
+    "semantic_hash": ""
+  },
+  "js/slides.js": {
+    "mtime": 1790125727.0419617,
+    "seen": 1790399457.647618,
+    "ast_hash": "0d60fec634379a2b4d3ecf99bcfa410f",
+    "semantic_hash": ""
+  },
+  "js/tour.js": {
+    "mtime": 1790306750.3602664,
+    "seen": 1790399457.647619,
+    "ast_hash": "b534e4d49691dbe2cdf8ee504057dbd2",
+    "semantic_hash": ""
+  },
+  "js/transport.js": {
+    "mtime": 1790313638.5552843,
+    "seen": 1790399457.6476202,
+    "ast_hash": "90796830d9bc97252c7f1cf161667cb4",
+    "semantic_hash": ""
+  },
+  "js/village.js": {
+    "mtime": 1790306625.2342079,
+    "seen": 1790399457.6476212,
+    "ast_hash": "f3232e9432d7e63cec3180beac63a3d5",
+    "semantic_hash": ""
+  },
+  "js/voice.js": {
+    "mtime": 1790334416.8218808,
+    "seen": 1790399457.6476219,
+    "ast_hash": "12b4ebf6e81d0821fb5a12c0182c6f68",
+    "semantic_hash": ""
+  },
+  "tests/board.test.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.6476228,
+    "ast_hash": "bde5d644c8fb2979f1b05fd5773a0ca8",
+    "semantic_hash": ""
+  },
+  "tests/dom.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.647624,
+    "ast_hash": "3d40bd53b43dbf0c8a32378627a2ec1c",
+    "semantic_hash": ""
+  },
+  "tests/private-call.test.js": {
+    "mtime": 1790334561.173774,
+    "seen": 1790399457.647625,
+    "ast_hash": "3cba6f272ddc83b41035cdcb11735471",
+    "semantic_hash": ""
+  },
+  "tests/rtc.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.647626,
+    "ast_hash": "c8351cf5010ce9d1ca83c6ececc56071",
+    "semantic_hash": ""
+  },
+  "tests/rules/firebase.json": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.647627,
+    "ast_hash": "44328914f99be68a8d85a52ffd1969b5",
+    "semantic_hash": ""
+  },
+  "tests/rules/rules.test.mjs": {
+    "mtime": 1790334584.4117043,
+    "seen": 1790399457.647628,
+    "ast_hash": "28b54ba9afe4a3f7c04b5f97ba63544d",
+    "semantic_hash": ""
+  },
+  "tests/slides.test.js": {
+    "mtime": 1790125924.6954749,
+    "seen": 1790399457.647629,
+    "ast_hash": "07bebec63067fb25921e578236a8e4c5",
+    "semantic_hash": ""
+  },
+  "tests/voice-compat.test.js": {
+    "mtime": 1790065388.7128377,
+    "seen": 1790399457.6476312,
+    "ast_hash": "f6f8023c786fa5d89bb75025643a2cee",
+    "semantic_hash": ""
+  },
+  "tests/voice-mesh.test.js": {
+    "mtime": 1790125025.5864227,
+    "seen": 1790399457.647632,
+    "ast_hash": "a54c02989be9953843481d47600791c7",
+    "semantic_hash": ""
+  },
+  "tests/voice.test.js": {
+    "mtime": 1789978847.0,
+    "seen": 1790399457.6476328,
+    "ast_hash": "1312bf383de9f10a83b6fe0d4724c34d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/2d-games/SKILL.md": {
+    "mtime": 1790063691.7685905,
+    "seen": 1790399457.647634,
+    "ast_hash": "68f101a036141b8bc846a7505d919dea",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/3d-games/SKILL.md": {
+    "mtime": 1790063691.7712338,
+    "seen": 1790399457.647636,
+    "ast_hash": "71d9f39780542dfdee589774e2996ad8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/SKILL.md": {
+    "mtime": 1790063691.7728534,
+    "seen": 1790399457.647637,
+    "ast_hash": "9b40098585f01ec12f5d5e1a7134d195",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/game-art/SKILL.md": {
+    "mtime": 1790063691.7746518,
+    "seen": 1790399457.647638,
+    "ast_hash": "c1c39e0908abc202414da889cf7e0e35",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/game-audio/SKILL.md": {
+    "mtime": 1790063691.7765532,
+    "seen": 1790399457.647639,
+    "ast_hash": "a00c0bf7efdc174c7645c03a1ee45b81",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/game-design/SKILL.md": {
+    "mtime": 1790063691.7779365,
+    "seen": 1790399457.64764,
+    "ast_hash": "68e4964de714f7c499f0097945d0802c",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/mobile-games/SKILL.md": {
+    "mtime": 1790063691.7790473,
+    "seen": 1790399457.6476412,
+    "ast_hash": "3cdf47646b828282a1e2e849ffcb56ed",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/multiplayer/SKILL.md": {
+    "mtime": 1790063691.7801719,
+    "seen": 1790399457.6476421,
+    "ast_hash": "e1b4002933e56373e84f0d6c971a130e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/pc-games/SKILL.md": {
+    "mtime": 1790063691.7809167,
+    "seen": 1790399457.6476429,
+    "ast_hash": "c1c121c4cb338a451830f183a6fedc43",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/vr-ar/SKILL.md": {
+    "mtime": 1790063691.7820497,
+    "seen": 1790399457.6476438,
+    "ast_hash": "2321afc32058091c04b4d1a8689826b2",
+    "semantic_hash": ""
+  },
+  ".claude/skills/game-development/web-games/SKILL.md": {
+    "mtime": 1790063691.782835,
+    "seen": 1790399457.647645,
+    "ast_hash": "e7d83856c7cfd91e03b6682435b039f7",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1790243567.8775964,
+    "seen": 1790399457.647646,
+    "ast_hash": "fc205e9a312ac503f2e4123083ef497b",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1790334439.9869769,
+    "seen": 1790399457.647647,
+    "ast_hash": "b807f15fbec3281b648d34971aaec9f4",
+    "semantic_hash": ""
+  },
+  "tests/README.md": {
+    "mtime": 1790334615.7281175,
+    "seen": 1790399457.647648,
+    "ast_hash": "20a386b3a6a461b2e139f567070b67ce",
+    "semantic_hash": ""
+  },
+  "video/Quantum Village - Platform Overview.pdf": {
+    "mtime": 1789995531.3966813,
+    "seen": 1790399457.647649,
+    "ast_hash": "c882f9d6799664b63168bb6134cfea3c",
+    "semantic_hash": ""
+  },
+  "Qunatum Village.png": {
+    "mtime": 1790060023.3086345,
+    "seen": 1790399457.64765,
+    "ast_hash": "efcba4935e13f5c96b3c91c5f4da8b43",
+    "semantic_hash": ""
+  },
+  "screenshots/Board.jpg": {
+    "mtime": 1790241299.6254728,
+    "seen": 1790399457.647651,
+    "ast_hash": "1ab5f78b19daf7717ce97fef9ce9cabf",
+    "semantic_hash": ""
+  },
+  "screenshots/Chat.jpg": {
+    "mtime": 1790241301.1950138,
+    "seen": 1790399457.6476521,
+    "ast_hash": "fb7be10a97dacd0ce7f0c4ac843b00a7",
+    "semantic_hash": ""
+  },
+  "screenshots/Intro.jpg": {
+    "mtime": 1790241299.2444952,
+    "seen": 1790399457.647653,
+    "ast_hash": "d1b0fac4bc13d11d5aec5620dbb4783a",
+    "semantic_hash": ""
+  },
+  "screenshots/Live Notifications.jpg": {
+    "mtime": 1790241298.7495217,
+    "seen": 1790399457.6476538,
+    "ast_hash": "8b98c48106c55e439a56083434fffc7c",
+    "semantic_hash": ""
+  },
+  "screenshots/Poster1.jpg": {
+    "mtime": 1790241301.5421083,
+    "seen": 1790399457.647655,
+    "ast_hash": "557687fe4548e3034f178b9608d8fd4b",
+    "semantic_hash": ""
+  },
+  "screenshots/Qunatum Village.jpg": {
+    "mtime": 1790241297.6687741,
+    "seen": 1790399457.647656,
+    "ast_hash": "b0c121e49a4d4f86f5ebe644f49af791",
+    "semantic_hash": ""
+  },
+  "screenshots/Qunatum Village.png": {
+    "mtime": 1790309670.1226842,
+    "seen": 1790399457.647657,
+    "ast_hash": "b00ee643ae8a6d8eec65b4cac3bdb9cf",
+    "semantic_hash": ""
+  },
+  "screenshots/Seminar1.jpg": {
+    "mtime": 1790241298.0151825,
+    "seen": 1790399457.6476579,
+    "ast_hash": "8a481b6b203b5206cf372f39d83e9e49",
+    "semantic_hash": ""
+  },
+  "screenshots/Seminar2a.jpg": {
+    "mtime": 1790241300.1689568,
+    "seen": 1790399457.647659,
+    "ast_hash": "36a25901653bb8437db0f16ebf43ab1f",
+    "semantic_hash": ""
+  },
+  "screenshots/Seminar3.jpg": {
+    "mtime": 1790241297.4391487,
+    "seen": 1790399457.647664,
+    "ast_hash": "8ad701a98cc8d93cd758191bc515e223",
+    "semantic_hash": ""
+  },
+  "video/Quantum.mov": {
+    "mtime": 1790004346.8795924,
+    "seen": 1790399457.6476648,
+    "ast_hash": "2ba2a347fbdfb769640b74ca48a42cb0",
+    "semantic_hash": ""
+  },
+  "video/Quantum.mp4": {
+    "mtime": 1790005735.5762002,
+    "seen": 1790399457.647666,
+    "ast_hash": "7ff4f8a902628826991b887e93fa7f40",
+    "semantic_hash": ""
+  },
+  "video/Screen Recording 2026-09-21 at 11.26.19\u202fPM.mov": {
+    "mtime": 1789999625.3092704,
+    "seen": 1790399457.647668,
+    "ast_hash": "615b2cc96944efba15cba1fdee811954",
+    "semantic_hash": ""
+  }
+}

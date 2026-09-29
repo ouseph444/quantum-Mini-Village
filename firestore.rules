@@ -1,0 +1,212 @@
+rules_version = '2';
+
+/* Quantum Village — Firestore security rules.
+ *
+ * The village is walled: every read and every write needs an account with a
+ * password that is not on the blocked list. Anonymous sign-in is off, so
+ * nothing here is world-readable.
+ *
+ * Administration lives in two collections, admins/{uid} and blocked/{uid}.
+ * admins is writable by no browser — seed it from the Firebase console —
+ * and blocked is writable only by an administrator. Every other rule in
+ * this file refuses a request from a blocked uid, which is what makes a
+ * block a block rather than a hidden button.
+ *
+ * Deploy with:  firebase deploy --only firestore:rules
+ * Or paste into: Firebase console → Firestore Database → Rules.
+ *
+ * Reading and writing both require a signed-in account, and anything that
+ * belongs to one resident (their score, their profile, an institute they
+ * founded) can only be written by that resident.
+ *
+ * Fast-changing state (presence, chat, seats, the speaking slot) is NOT
+ * here: it lives in the Realtime Database, see database.rules.json.
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* An account with a password, and nothing else. The village no longer
+       hands out anonymous visitor passes, and a token from one — or from any
+       other provider — is refused here as well as at the front door, so an
+       old session cannot write by going round the page. */
+    function signedIn() {
+      return request.auth != null
+             && request.auth.token.firebase.sign_in_provider == 'password'
+             && !isBlocked();
+    }
+    /* Administration. The admins collection is writable by nobody: it is
+       seeded from the Firebase console or by a server holding a service
+       account, so the page that checks for an administrator cannot make
+       one. Everything else here asks these two questions. */
+    function isAdmin() {
+      return request.auth != null
+             && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function isBlocked() {
+      return exists(/databases/$(database)/documents/blocked/$(request.auth.uid));
+    }
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+    function shortString(v, n) {
+      return v is string && v.size() <= n;
+    }
+    /* A field that a resident may simply not have filled in. */
+    function optString(d, k, n) {
+      return !(k in d) || shortString(d[k], n);
+    }
+
+    /* Who may administer the village. Read by everyone so the page knows
+       whether to offer the panel; written by no browser at any time. */
+    match /admins/{uid} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    /* Residents who are barred. signedIn() above consults this on every
+       single read and write in this file, so an entry here is a wall and
+       not a hidden button: a blocked account keeps a perfectly valid token
+       and is refused everything. Deliberately outside signedIn(), so that
+       somebody who has been blocked can still read their own record and be
+       told why, and an administrator who blocked themselves can undo it. */
+    match /blocked/{uid} {
+      allow read: if request.auth != null
+                  && (request.auth.uid == uid || isAdmin());
+      allow create, update: if isAdmin()
+                            && request.resource.data.by == request.auth.uid
+                            && request.resource.data.at is number;
+      allow delete: if isAdmin();
+    }
+
+    /* Institutes residents found. Anyone signed in may create one; only the
+       founder may edit or remove it afterwards. */
+    match /institutes/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+                    && request.resource.data.by == request.auth.uid
+                    && shortString(request.resource.data.name, 40);
+      allow update, delete: if signedIn() && resource.data.by == request.auth.uid;
+    }
+
+    /* Research groups. Any signed-in resident may create one or change the
+       membership list — that is how joining and leaving works. */
+    match /groups/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && shortString(request.resource.data.name, 60);
+      allow update: if signedIn();
+      allow delete: if signedIn() && resource.data.by == request.auth.uid;
+    }
+
+    /* A paper discussion room. Like every other chat section in the village
+       it keeps no history: each post carries an expiry, and every write
+       sweeps out whatever has passed it, so the room empties itself without
+       a scheduled job. The size cap is what stops one from growing without
+       bound between sweeps. */
+    match /threads/{id} {
+      allow read: if signedIn();
+      allow write: if signedIn()
+                   && request.resource.data.posts.size() <= 45;
+    }
+
+    /* One score document per resident, writable only by that resident. */
+    match /scores/{uid} {
+      allow read: if signedIn();
+      allow delete: if isOwner(uid) || isAdmin();
+      allow write: if isOwner(uid)
+                   && request.resource.data.points is number
+                   && request.resource.data.points >= 0
+                   && request.resource.data.points <= 1000000;
+    }
+
+    /* Resident profiles: name, position, affiliation, ORCID iD and avatar. */
+    match /residents/{uid} {
+      allow read: if signedIn();
+      /* An administrator removing somebody removes their record with them. */
+      allow delete: if isOwner(uid) || isAdmin();
+      allow write: if isOwner(uid)
+                   && shortString(request.resource.data.name, 24)
+                   /* how they are addressed, where they work, and the ORCID
+                      iD that identifies them on their papers */
+                   && optString(request.resource.data, 'title', 6)
+                   && optString(request.resource.data, 'orcid', 19)
+                   && optString(request.resource.data, 'inst', 90)
+                   && optString(request.resource.data, 'country', 56);
+    }
+
+    /* ------------------------------------------------------------------
+     * The collections below are only used when the project has no Realtime
+     * Database. The village prefers the Realtime Database for anything that
+     * changes several times a second — it is cheaper and its rules are
+     * stricter — and falls back to these automatically. Leaving them in
+     * place costs nothing if you never use them.
+     * ---------------------------------------------------------------- */
+
+    /* Where each resident is standing. One document per resident, written
+       about once every two and a half seconds while they are moving.
+       A record left behind by a closed tab may be cleared by anyone once it
+       is five minutes stale. */
+    match /presence/{uid} {
+      allow read: if signedIn();
+      allow create, update: if isOwner(uid)
+                            && request.resource.data.at is number
+                            && request.resource.data.x is number
+                            && request.resource.data.z is number
+                            && shortString(request.resource.data.n, 32);
+      allow delete: if isOwner(uid)
+                    || isAdmin()
+                    || (resource.data.at is number
+                        && request.time.toMillis() - resource.data.at > 300000);
+    }
+
+    /* Village talk. Written once by its author and never edited, and kept
+       only until the people who are online have read it: each line carries
+       an `exp`, its author deletes it when the time to live is up, and any
+       reader may clear one whose expiry has passed. There is no history
+       here either — the six-hour window this used to keep is gone. */
+    match /chat/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+                    && request.resource.data.uid == request.auth.uid
+                    && shortString(request.resource.data.n, 32)
+                    && shortString(request.resource.data.m, 300)
+                    && request.resource.data.at is number;
+      allow update: if false;
+      allow delete: if signedIn()
+                    && (resource.data.uid == request.auth.uid
+                        || (resource.data.exp is number
+                            && request.time.toMillis() > resource.data.exp)
+                        || request.time.toMillis() - resource.data.at > 120000);
+    }
+
+    /* Announcements: an institute founded, a seminar called. */
+    match /events/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+                    && shortString(request.resource.data.kind, 24)
+                    && request.resource.data.at is number;
+      allow update: if false;
+      allow delete: if signedIn()
+                    && request.time.toMillis() - resource.data.at > 86400000;
+    }
+
+    /* Who is sitting where, and who has the blackboard. One document per
+       room: { seats: { "3": {u,t} }, speaker: {u,t} }.
+       Note: unlike the Realtime Database rules, these cannot check seat
+       ownership field by field, so a signed-in resident could in principle
+       rearrange a room. The claim logic is still transactional, so ordinary
+       use cannot double-book a chair. Create the Realtime Database if you
+       want the stricter version. */
+    match /rooms/{roomId} {
+      allow read: if signedIn();
+      allow write: if signedIn()
+                   && request.resource.data.keys().hasOnly(['seats', 'speaker'])
+                   && request.resource.data.seats.size() <= 64;
+    }
+
+    /* Nothing else. */
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

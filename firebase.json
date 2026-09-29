@@ -1,0 +1,25 @@
+{
+  "//": "Lets `firebase deploy` find the rule files. Hosting is optional — the village is static files and runs just as well on GitHub Pages.",
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "firestore.rules",
+      "database.rules.json",
+      "functions/**",
+      "**/.*",
+      "**/node_modules/**",
+      "README.md"
+    ]
+  },
+  "functions": {
+    "//": "Optional. Only the privileged half of administration lives here: disabling and deleting Firebase Authentication accounts, which needs the Admin SDK and must never run in a browser. Blocking works without it. Deploy with: cd functions && npm install && firebase deploy --only functions",
+    "source": "functions"
+  }
+}
